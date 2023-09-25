@@ -1,0 +1,445 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "ddosProtectionPlanEnabled": {
+            "type": "Bool",
+            "metadata": {
+                "description": ""
+            }
+        },
+        "firewallSubnetAddressSpace": {
+            "type": "String",
+            "metadata": {
+                "description": "The network addresses of the firewall subnet."
+            }
+        },
+        "bastionSubnetAddressSpace": {
+            "type": "String",
+            "metadata": {
+                "description": "The network addresses of the bastion subnet."
+            }
+        },
+        "locationshortname": {
+            "allowedValues": [
+                "cu",
+                "eu1",
+                "eu2",
+                "ncu",
+                "scu",
+                "wcu",
+                "wu1",
+                "wu2",
+                "wu3"
+            ],
+            "type": "string",
+            "metadata": {
+                "description": "Azure region where the virtual network will be created."
+            }
+        },
+        "subnetAddressSpaces": {
+            "type": "Array",
+            "metadata": {
+                "description": "The network addresses of the subnets."
+            }
+        },
+        "vnetAddressSpace": {
+            "type": "string",
+            "metadata": {
+                "description": "The network addresses for the virtual network."
+            }
+        }
+    },
+    "functions": [],
+    "variables": {},
+    "resources": [
+        // virtual network
+        {
+            "name": "[concat('vnet-shd-', parameters('locationshortname'), '-1')]",
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2023-04-01",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "displayName": "[concat('vnet-shd-', parameters('locationshortname'), '-1')]",
+                "environment": "poc",
+                "application": "shared" 
+            },
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "[parameters('vnetAddressSpace')]"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "[concat('snet-shd-', parameters('locationshortname'), '-1')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('subnetAddressSpaces')[0]]"
+                        }
+                    },
+                    {
+                        "name": "[concat('snet-shd-', parameters('locationshortname'), '-2')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('subnetAddressSpaces')[1]]"
+                        }
+                    },
+                    {
+                        "name": "AzureFirewallSubnet",
+                        "properties": {
+                            "addressPrefix": "[parameters('firewallSubnetAddressSpace')]"
+                        }
+                    },
+                    {
+                        "name": "AzureBastionSubnet",
+                        "properties": {
+                            "addressPrefix": "[parameters('bastionSubnetAddressSpace')]"
+                        }
+                    }
+                ],
+                "enableDdosProtection": "[parameters('ddosProtectionPlanEnabled')]"
+            }
+        },
+        // firewall
+        {
+            "name": "[concat('afw-shd-', parameters('locationshortname'),'-1')]",
+            "type": "Microsoft.Network/azureFirewalls",
+            "apiVersion": "2023-04-01",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "environment": "poc",
+                "application": "shared"
+            },
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipConfigName",
+                        "properties": {
+                            "subnet": {
+                                "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/virtualNetworks/subnets', concat('vnet-shd-', parameters('locationshortname'), '-1'), 'AzureFirewallSubnet')]"
+                            },
+                            "publicIPAddress": {
+                                "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIPAddresses', concat('pip-shd-', parameters('locationshortname'),'-1'))]"
+                            }
+                        }
+                    }
+                ],
+                "firewallPolicy": {
+                    "id": "[resourceId('Microsoft.Network/firewallPolicies', concat('waf-shd-', parameters('locationshortname'), '-1'))]"
+                },
+                "sku": {
+                    "name": "AZFW_VNet",
+                    "tier": "Premium"
+                }
+            },
+            "dependsOn": [
+                "[resourceId(resourceGroup().name, 'Microsoft.Network/virtualNetworks', concat('vnet-shd-', parameters('locationshortname'), '-1'))]",
+                "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', concat('pip-shd-', parameters('locationshortname'),'-1'))]",
+                "[resourceId(resourceGroup().name, 'Microsoft.Network/firewallPolicies', concat('waf-shd-', parameters('locationshortname'), '-1'))]",
+                "[resourceId(resourceGroup().name, 'Microsoft.Network/firewallPolicies/ruleCollectionGroups', concat('waf-shd-', parameters('locationshortname'), '-1'), concat('wafrg-shd-', parameters('locationshortname'), '-1'))]",
+                "[resourceId(resourceGroup().name, 'Microsoft.OperationalInsights/workspaces', concat('log-shd', parameters('locationshortname'), '-1'))]"
+            ]            
+        },
+        // firewall public ip
+        {
+            "name": "[concat('pip-shd-', parameters('locationshortname'),'-1')]",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2023-04-01",
+            "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "standard"
+            },
+            "tags": {
+                "displayName": "[concat('pip-shd-', parameters('locationshortname'),'-1')]",
+                "createdFor": "[concat('afw-shd-', parameters('locationshortname'),'-1')]",
+                "environment": "poc",
+                "application": "shared"
+            },
+            "properties": {
+                "publicIPAllocationMethod": "Static",
+                "dnsSettings": {
+                    "domainNameLabel": "[concat('afw-shd-', parameters('locationshortname'),'-1-', uniqueString(resourceGroup().id))]"
+                }
+            }
+        },
+        // fw policy
+        {
+            "name": "[concat('waf-shd-', parameters('locationshortname'), '-1')]",
+            "type": "Microsoft.Network/firewallPolicies",
+            "apiVersion": "2023-04-01",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "environment": "poc",
+                "application": "shared"
+            },
+            "properties": {
+                "sku": {
+                    "tier": "Premium"
+                },
+                "threatIntelMode": "Alert",
+                "dnsSettings": {
+                    "servers": [],
+                    "enableProxy": true
+                },
+                "insights": {
+                    "isEnabled": true,
+                    "logAnalyticsResources": {
+                        "defaultWorkspaceId": {
+                            "id": "[resourceId(resourceGroup().name, 'Microsoft.OperationalInsights/workspaces', concat('log-shd', parameters('locationshortname'), '-1'))]"
+                        },
+                        "workspaces": []
+                    },
+                    "retentionDays": 30
+                },
+                "intrusionDetection": {
+                    "mode": "Alert",
+                    "configuration": {
+                        "signatureOverrides": [],
+                        "bypassTrafficSettings": []
+					}
+                }
+            },
+            "dependsOn": [
+                "[resourceId(resourceGroup().name, 'Microsoft.OperationalInsights/workspaces', concat('log-shd', parameters('locationshortname'), '-1'))]"
+            ]
+        },
+        // rule collection group
+        {
+            "name": "[concat('waf-shd-', parameters('locationshortname'), '-1/','wafrg-shd-', parameters('locationshortname'), '-1')]",
+            "type": "Microsoft.Network/firewallPolicies/ruleCollectionGroups",
+            "apiVersion": "2023-05-01",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "environment": "poc",
+                "application": "shared"
+            },
+            "properties": {
+                "priority": 20000,
+                "ruleCollections": [
+                    {
+                        "name": "applicationrules-internet-allow",
+                        "priority": 20001,
+                        "ruleCollectionType": "FirewallPolicyFilterRuleCollection",
+                        "action": {
+                            "type": "Allow"
+                        },
+                        "rules": [
+                            {
+                                "description": "Catchall rule for general browsing",
+                                "name": "allow-general-browsing",
+                                "ruleType": "ApplicationRule",
+                                "protocols": [
+                                    {
+                                        "protocolType": "Http",
+                                        "port": 80
+                                    },
+                                    {
+                                        "protocolType": "Https",
+                                        "port": 443
+                                    }
+                                ],
+                                "fqdnTags": [],
+                                "webCategories": [
+                                    "business",
+                                    "computersandtechnology",
+                                    "education",
+                                    "finance",
+                                    "forumsandnewsgroups",
+                                    "government",
+                                    "healthandmedicine",
+                                    "informationsecurity",
+                                    "jobsearch",
+                                    "news",
+                                    "nonprofitsandngos",
+                                    "personalsites",
+                                    "professionalnetworking",
+                                    "searchenginesandportals",
+                                    "translators",
+                                    "webrepositoryandstorage",
+                                    "webbasedemail",
+                                    "advertisementsandpopups",
+                                    "chat",
+                                    "games",
+                                    "instantmessaging",
+                                    "shopping",
+                                    "socialnetworking",
+                                    "arts",
+                                    "fashionandbeauty",
+                                    "general",
+                                    "leisureandrecreation",
+                                    "natureandconservation",
+                                    "politicsandlaw",
+                                    "realestate",
+                                    "religion",
+                                    "restaurantsanddining",
+                                    "sports",
+                                    "transportation",
+                                    "travel"
+                                ],
+                                "targetFqdns": [],
+                                "targetUrls": [],
+                                "terminateTLS": false,
+                                "sourceAddresses": [
+                                    "*"
+                                ],
+                                "destinationAddresses": [],
+                                "sourceIpGroups": [],
+                                "httpHeadersToInsert": []
+                            }
+                        ]                        
+                    },
+                    {
+                        "name": "applicationrules-internet-deny",
+                        "priority": 20010,
+                        "ruleCollectionType": "FirewallPolicyFilterRuleCollection",
+                        "action": {
+                            "type": "Deny"
+                        },
+                        "rules": [
+                            {
+                                "description": "Catchall rule for general browsing",
+                                "name": "deny-unauthorized-browsing",
+                                "ruleType": "ApplicationRule",
+                                "protocols": [
+                                    {
+                                        "protocolType": "Http",
+                                        "port": 80
+                                    },
+                                    {
+                                        "protocolType": "Https",
+                                        "port": 443
+                                    }
+                                ],
+                                "fqdnTags": [],
+                                "webCategories": [
+                                    "childabuseimages",
+                                    "criminalactivity",
+                                    "datingandpersonals",
+                                    "gambling",
+                                    "hacking",
+                                    "hateandintolerance",
+                                    "illegaldrug",
+                                    "illegalsoftware",
+                                    "lingerieandswimsuits",
+                                    "marijuana",
+                                    "nudity",
+                                    "pornographyandsexuallyexplicit",
+                                    "selfharm",
+                                    "sexeducation",
+                                    "tasteless",
+                                    "violence",
+                                    "weapons",
+                                    "imagesharing",
+                                    "peertopeer",
+                                    "streamingmediaanddownloads",
+                                    "downloadsites",
+                                    "entertainment",
+                                    "cults"
+                                ],
+                                "targetFqdns": [],
+                                "targetUrls": [],
+                                "terminateTLS": false,
+                                "sourceAddresses": [
+                                    "*"
+                                ],
+                                "destinationAddresses": [],
+                                "sourceIpGroups": [],
+                                "httpHeadersToInsert": []
+                            }
+                        ]
+                    }
+                ]
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/firewallPolicies', concat('waf-shd-', parameters('locationshortname'), '-1'))]"
+            ]
+        },
+        // analytics workspace
+        {
+            "name": "[concat('log-shd-', parameters('locationshortname'), '-1')]",
+            "type": "Microsoft.OperationalInsights/workspaces",
+            "apiVersion": "2021-12-01-preview",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "environment": "poc",
+                "application": "shared"
+            },
+            "properties": {
+                "sku": {
+                    "name": "pergb2018"
+                },
+                "retentionInDays": 30,
+                "features": {
+                    "enableLogAccessUsingOnlyResourcePermissions": true
+                },
+                "workspaceCapping": {
+                    "dailyQuotaGb": -1
+                },
+                "publicNetworkAccessForIngestion": "Enabled",
+                "publicNetworkAccessForQuery": "Enabled"
+            }
+        },
+        // bastion
+        {
+            "name": "[concat('bas-shd-', parameters('locationshortname'),'-1')]",
+            "type": "Microsoft.Network/bastionHosts",
+            "apiVersion": "2023-04-01",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "environment": "poc",
+                "application": "shared"
+            },
+            "sku": {
+                "name": "Standard"
+            },
+            "properties": {
+                "disableCopyPaste": false,
+                "enableFileCopy": true,
+                "enableShareableLink": true,
+                "enableTunneling": true,
+                "ipConfigurations": [
+                {
+                    "id": "[concat(resourceId('Microsoft.Network/bastionHosts', concat('bas-shd-', parameters('locationshortname'),'-1')), '/bastionHostIpConfigurations/IpConf')]",
+                    "name": "IpConf",
+                    "properties": {
+                        "privateIPAllocationMethod": "Dynamic",
+                        "publicIPAddress": {
+                            "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', concat('pip-shd-', parameters('locationshortname'),'-2'))]"
+                        },
+                        "subnet": {
+                            "id": "[concat(resourceId(resourceGroup().name, 'Microsoft.Network/virtualNetworks', concat('vnet-shd-', parameters('locationshortname'), '-1')), '/subnets/AzureBastionSubnet')]"
+                        }
+                    }
+                }
+                ],
+                "scaleUnits": 2
+            },
+            "dependsOn": [
+                "[resourceId(resourceGroup().name, 'Microsoft.Network/virtualNetworks', concat('vnet-shd-', parameters('locationshortname'), '-1'))]",
+                "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', concat('pip-shd-', parameters('locationshortname'),'-2'))]"
+            ]
+        },
+        // bastion public ip
+        {
+            "name": "[concat('pip-shd-', parameters('locationshortname'),'-2')]",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2023-04-01",
+            "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "standard"
+            },
+            "tags": {
+                "displayName": "[concat('pip-shd-', parameters('locationshortname'),'-2')]",
+                "createdFor": "[concat('bas-shd-', parameters('locationshortname'),'-1')]",
+                "environment": "poc",
+                "application": "shared"
+            },
+            "properties": {
+                "publicIPAllocationMethod": "Static",
+                "dnsSettings": {
+                    "domainNameLabel": "[concat('bas-shd-', parameters('locationshortname'),'-1-', uniqueString(resourceGroup().id))]"
+                }
+            }
+        }
+    ],    
+    "outputs": {}
+}

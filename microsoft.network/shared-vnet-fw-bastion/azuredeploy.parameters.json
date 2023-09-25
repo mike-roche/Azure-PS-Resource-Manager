@@ -1,0 +1,27 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "ddosProtectionPlanEnabled": {
+            "value": false
+        },
+        "firewallSubnetAddressSpace": {
+            "value": "10.0.0.192/26"
+        },
+        "bastionSubnetAddressSpace": {
+            "value": "10.0.0.128/26"
+        },
+        "locationshortname": {
+            "value": "eu1"
+        },
+        "subnetAddressSpaces": {
+            "value": [
+                "10.0.0.0/26",
+                "10.0.0.64/26"
+            ]
+        },
+        "vnetAddressSpace": {
+            "value": "10.0.0.0/24"
+        }
+    }
+}
