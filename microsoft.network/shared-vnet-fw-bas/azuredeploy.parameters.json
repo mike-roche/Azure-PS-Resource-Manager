@@ -3,25 +3,24 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "ddosProtectionPlanEnabled": {
-            "value": false
+            "value": false // TODO: Fill in parameter value
         },
         "firewallSubnetAddressSpace": {
-            "value": "10.0.0.192/26"
+            "value": "" // TODO: Fill in parameter value
         },
         "bastionSubnetAddressSpace": {
-            "value": "10.0.0.128/26"
+            "value": "" // TODO: Fill in parameter value
         },
-        "locationshortname": {
-            "value": "eu1"
+        "locationShortName": {
+            "value": "" // TODO: Fill in parameter value
         },
         "subnetAddressSpaces": {
             "value": [
-                "10.0.0.0/26",
-                "10.0.0.64/26"
+                // TODO: Fill in parameter value
             ]
         },
         "vnetAddressSpace": {
-            "value": "10.0.0.0/24"
+            "value": "" // TODO: Fill in parameter value
         }
     }
 }

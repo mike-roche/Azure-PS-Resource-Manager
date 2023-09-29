@@ -1,0 +1,35 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "customerShortName": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "ddosProtectionPlanEnabled": {
+            "value": false // TODO: Fill in parameter value
+        },
+        "locationShortName": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "sharedResourceGroupName": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "sharedRouteTableName": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "sharedVnetAddressSpace": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "sharedVnetName": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "subnetAddressSpaces": {
+            "value": [
+                // TODO: Fill in parameter value
+            ]
+        },
+        "vnetAddressSpaces": {
+            "value": "" // TODO: Fill in parameter value
+        }
+    }
+}

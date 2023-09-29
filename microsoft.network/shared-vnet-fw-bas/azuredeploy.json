@@ -3,7 +3,8 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "ddosProtectionPlanEnabled": {
-            "type": "Bool",
+            "type": "bool",
+            "defaultValue": false,
             "metadata": {
                 "description": ""
             }
@@ -20,7 +21,7 @@
                 "description": "The network addresses of the bastion subnet."
             }
         },
-        "locationshortname": {
+        "locationShortName": {
             "allowedValues": [
                 "cu",
                 "eu1",
@@ -38,7 +39,9 @@
             }
         },
         "subnetAddressSpaces": {
-            "type": "Array",
+            "type": "array",
+            "minLength": 2,
+            "maxLength": 2,
             "metadata": {
                 "description": "The network addresses of the subnets."
             }
@@ -55,15 +58,18 @@
     "resources": [
         // virtual network
         {
-            "name": "[concat('vnet-shd-', parameters('locationshortname'), '-1')]",
+            "name": "[concat('vnet-shd-', parameters('locationShortName'), '-1')]",
             "type": "Microsoft.Network/virtualNetworks",
             "apiVersion": "2023-04-01",
             "location": "[resourceGroup().location]",
             "tags": {
-                "displayName": "[concat('vnet-shd-', parameters('locationshortname'), '-1')]",
+                "displayName": "[concat('vnet-shd-', parameters('locationShortName'), '-1')]",
                 "environment": "poc",
                 "application": "shared" 
             },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/routeTables', concat('rt-shd-', parameters('locationShortName'),'-1'))]"
+            ],
             "properties": {
                 "addressSpace": {
                     "addressPrefixes": [
@@ -72,15 +78,27 @@
                 },
                 "subnets": [
                     {
-                        "name": "[concat('snet-shd-', parameters('locationshortname'), '-1')]",
+                        "name": "[concat('snet-shd-', parameters('locationShortName'), '-1')]",
                         "properties": {
-                            "addressPrefix": "[parameters('subnetAddressSpaces')[0]]"
+                            "addressPrefix": "[parameters('subnetAddressSpaces')[0]]",
+                            "routeTable": {
+                                "id": "[resourceId('Microsoft.Network/routeTables', concat('rt-shd-', parameters('locationShortName'),'-1'))]"
+                            },
+                            "delegations": [],
+                            "privateEndpointNetworkPolicies": "Disabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled"
                         }
                     },
                     {
-                        "name": "[concat('snet-shd-', parameters('locationshortname'), '-2')]",
+                        "name": "[concat('snet-shd-', parameters('locationShortName'), '-2')]",
                         "properties": {
-                            "addressPrefix": "[parameters('subnetAddressSpaces')[1]]"
+                            "addressPrefix": "[parameters('subnetAddressSpaces')[1]]",
+                            "routeTable": {
+                                "id": "[resourceId('Microsoft.Network/routeTables', concat('rt-shd-', parameters('locationShortName'),'-1'))]"
+                            },
+                            "delegations": [],
+                            "privateEndpointNetworkPolicies": "Disabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled"
                         }
                     },
                     {
@@ -101,7 +119,7 @@
         },
         // firewall
         {
-            "name": "[concat('afw-shd-', parameters('locationshortname'),'-1')]",
+            "name": "[concat('afw-shd-', parameters('locationShortName'),'-1')]",
             "type": "Microsoft.Network/azureFirewalls",
             "apiVersion": "2023-04-01",
             "location": "[resourceGroup().location]",
@@ -115,16 +133,16 @@
                         "name": "ipConfigName",
                         "properties": {
                             "subnet": {
-                                "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/virtualNetworks/subnets', concat('vnet-shd-', parameters('locationshortname'), '-1'), 'AzureFirewallSubnet')]"
+                                "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/virtualNetworks/subnets', concat('vnet-shd-', parameters('locationShortName'), '-1'), 'AzureFirewallSubnet')]"
                             },
                             "publicIPAddress": {
-                                "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIPAddresses', concat('pip-shd-', parameters('locationshortname'),'-1'))]"
+                                "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIPAddresses', concat('pip-shd-', parameters('locationShortName'),'-1'))]"
                             }
                         }
                     }
                 ],
                 "firewallPolicy": {
-                    "id": "[resourceId('Microsoft.Network/firewallPolicies', concat('waf-shd-', parameters('locationshortname'), '-1'))]"
+                    "id": "[resourceId('Microsoft.Network/firewallPolicies', concat('waf-shd-', parameters('locationShortName'), '-1'))]"
                 },
                 "sku": {
                     "name": "AZFW_VNet",
@@ -132,16 +150,16 @@
                 }
             },
             "dependsOn": [
-                "[resourceId(resourceGroup().name, 'Microsoft.Network/virtualNetworks', concat('vnet-shd-', parameters('locationshortname'), '-1'))]",
-                "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', concat('pip-shd-', parameters('locationshortname'),'-1'))]",
-                "[resourceId(resourceGroup().name, 'Microsoft.Network/firewallPolicies', concat('waf-shd-', parameters('locationshortname'), '-1'))]",
-                "[resourceId(resourceGroup().name, 'Microsoft.Network/firewallPolicies/ruleCollectionGroups', concat('waf-shd-', parameters('locationshortname'), '-1'), concat('wafrg-shd-', parameters('locationshortname'), '-1'))]",
-                "[resourceId(resourceGroup().name, 'Microsoft.OperationalInsights/workspaces', concat('log-shd', parameters('locationshortname'), '-1'))]"
+                "[resourceId(resourceGroup().name, 'Microsoft.Network/virtualNetworks', concat('vnet-shd-', parameters('locationShortName'), '-1'))]",
+                "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', concat('pip-shd-', parameters('locationShortName'),'-1'))]",
+                "[resourceId(resourceGroup().name, 'Microsoft.Network/firewallPolicies', concat('waf-shd-', parameters('locationShortName'), '-1'))]",
+                "[resourceId(resourceGroup().name, 'Microsoft.Network/firewallPolicies/ruleCollectionGroups', concat('waf-shd-', parameters('locationShortName'), '-1'), concat('wafrg-shd-', parameters('locationShortName'), '-1'))]",
+                "[resourceId(resourceGroup().name, 'Microsoft.OperationalInsights/workspaces', concat('log-shd-', parameters('locationShortName'), '-1'))]"
             ]            
         },
         // firewall public ip
         {
-            "name": "[concat('pip-shd-', parameters('locationshortname'),'-1')]",
+            "name": "[concat('pip-shd-', parameters('locationShortName'),'-1')]",
             "type": "Microsoft.Network/publicIPAddresses",
             "apiVersion": "2023-04-01",
             "location": "[resourceGroup().location]",
@@ -149,21 +167,21 @@
                 "name": "standard"
             },
             "tags": {
-                "displayName": "[concat('pip-shd-', parameters('locationshortname'),'-1')]",
-                "createdFor": "[concat('afw-shd-', parameters('locationshortname'),'-1')]",
+                "displayName": "[concat('pip-shd-', parameters('locationShortName'),'-1')]",
+                "createdFor": "[concat('afw-shd-', parameters('locationShortName'),'-1')]",
                 "environment": "poc",
                 "application": "shared"
             },
             "properties": {
                 "publicIPAllocationMethod": "Static",
                 "dnsSettings": {
-                    "domainNameLabel": "[concat('afw-shd-', parameters('locationshortname'),'-1-', uniqueString(resourceGroup().id))]"
+                    "domainNameLabel": "[concat('afw-shd-', parameters('locationShortName'),'-1-', uniqueString(resourceGroup().id))]"
                 }
             }
         },
         // fw policy
         {
-            "name": "[concat('waf-shd-', parameters('locationshortname'), '-1')]",
+            "name": "[concat('waf-shd-', parameters('locationShortName'), '-1')]",
             "type": "Microsoft.Network/firewallPolicies",
             "apiVersion": "2023-04-01",
             "location": "[resourceGroup().location]",
@@ -184,7 +202,7 @@
                     "isEnabled": true,
                     "logAnalyticsResources": {
                         "defaultWorkspaceId": {
-                            "id": "[resourceId(resourceGroup().name, 'Microsoft.OperationalInsights/workspaces', concat('log-shd', parameters('locationshortname'), '-1'))]"
+                            "id": "[resourceId(resourceGroup().name, 'Microsoft.OperationalInsights/workspaces', concat('log-shd-', parameters('locationShortName'), '-1'))]"
                         },
                         "workspaces": []
                     },
@@ -199,12 +217,12 @@
                 }
             },
             "dependsOn": [
-                "[resourceId(resourceGroup().name, 'Microsoft.OperationalInsights/workspaces', concat('log-shd', parameters('locationshortname'), '-1'))]"
+                "[resourceId(resourceGroup().name, 'Microsoft.OperationalInsights/workspaces', concat('log-shd-', parameters('locationShortName'), '-1'))]"
             ]
         },
         // rule collection group
         {
-            "name": "[concat('waf-shd-', parameters('locationshortname'), '-1/','wafrg-shd-', parameters('locationshortname'), '-1')]",
+            "name": "[concat('waf-shd-', parameters('locationShortName'), '-1/','wafrg-shd-', parameters('locationShortName'), '-1')]",
             "type": "Microsoft.Network/firewallPolicies/ruleCollectionGroups",
             "apiVersion": "2023-05-01",
             "location": "[resourceGroup().location]",
@@ -350,12 +368,12 @@
                 ]
             },
             "dependsOn": [
-                "[resourceId('Microsoft.Network/firewallPolicies', concat('waf-shd-', parameters('locationshortname'), '-1'))]"
+                "[resourceId('Microsoft.Network/firewallPolicies', concat('waf-shd-', parameters('locationShortName'), '-1'))]"
             ]
         },
-        // analytics workspace
+        // fw policy analytics workspace
         {
-            "name": "[concat('log-shd-', parameters('locationshortname'), '-1')]",
+            "name": "[concat('log-shd-', parameters('locationShortName'), '-1')]",
             "type": "Microsoft.OperationalInsights/workspaces",
             "apiVersion": "2021-12-01-preview",
             "location": "[resourceGroup().location]",
@@ -378,9 +396,9 @@
                 "publicNetworkAccessForQuery": "Enabled"
             }
         },
-        // bastion
+        // bastion host
         {
-            "name": "[concat('bas-shd-', parameters('locationshortname'),'-1')]",
+            "name": "[concat('bas-shd-', parameters('locationShortName'),'-1')]",
             "type": "Microsoft.Network/bastionHosts",
             "apiVersion": "2023-04-01",
             "location": "[resourceGroup().location]",
@@ -398,15 +416,15 @@
                 "enableTunneling": true,
                 "ipConfigurations": [
                 {
-                    "id": "[concat(resourceId('Microsoft.Network/bastionHosts', concat('bas-shd-', parameters('locationshortname'),'-1')), '/bastionHostIpConfigurations/IpConf')]",
+                    "id": "[concat(resourceId('Microsoft.Network/bastionHosts', concat('bas-shd-', parameters('locationShortName'),'-1')), '/bastionHostIpConfigurations/IpConf')]",
                     "name": "IpConf",
                     "properties": {
                         "privateIPAllocationMethod": "Dynamic",
                         "publicIPAddress": {
-                            "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', concat('pip-shd-', parameters('locationshortname'),'-2'))]"
+                            "id": "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', concat('pip-shd-', parameters('locationShortName'),'-2'))]"
                         },
                         "subnet": {
-                            "id": "[concat(resourceId(resourceGroup().name, 'Microsoft.Network/virtualNetworks', concat('vnet-shd-', parameters('locationshortname'), '-1')), '/subnets/AzureBastionSubnet')]"
+                            "id": "[concat(resourceId(resourceGroup().name, 'Microsoft.Network/virtualNetworks', concat('vnet-shd-', parameters('locationShortName'), '-1')), '/subnets/AzureBastionSubnet')]"
                         }
                     }
                 }
@@ -414,13 +432,13 @@
                 "scaleUnits": 2
             },
             "dependsOn": [
-                "[resourceId(resourceGroup().name, 'Microsoft.Network/virtualNetworks', concat('vnet-shd-', parameters('locationshortname'), '-1'))]",
-                "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', concat('pip-shd-', parameters('locationshortname'),'-2'))]"
+                "[resourceId(resourceGroup().name, 'Microsoft.Network/virtualNetworks', concat('vnet-shd-', parameters('locationShortName'), '-1'))]",
+                "[resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', concat('pip-shd-', parameters('locationShortName'),'-2'))]"
             ]
         },
-        // bastion public ip
+        // bastion host public ip
         {
-            "name": "[concat('pip-shd-', parameters('locationshortname'),'-2')]",
+            "name": "[concat('pip-shd-', parameters('locationShortName'),'-2')]",
             "type": "Microsoft.Network/publicIPAddresses",
             "apiVersion": "2023-04-01",
             "location": "[resourceGroup().location]",
@@ -428,16 +446,41 @@
                 "name": "standard"
             },
             "tags": {
-                "displayName": "[concat('pip-shd-', parameters('locationshortname'),'-2')]",
-                "createdFor": "[concat('bas-shd-', parameters('locationshortname'),'-1')]",
+                "displayName": "[concat('pip-shd-', parameters('locationShortName'),'-2')]",
+                "createdFor": "[concat('bas-shd-', parameters('locationShortName'),'-1')]",
                 "environment": "poc",
                 "application": "shared"
             },
             "properties": {
                 "publicIPAllocationMethod": "Static",
                 "dnsSettings": {
-                    "domainNameLabel": "[concat('bas-shd-', parameters('locationshortname'),'-1-', uniqueString(resourceGroup().id))]"
+                    "domainNameLabel": "[concat('bas-shd-', parameters('locationShortName'),'-1-', uniqueString(resourceGroup().id))]"
                 }
+            }
+        },
+        // route table
+        {
+            "name": "[concat('rt-shd-', parameters('locationShortName'),'-1')]",
+            "type": "Microsoft.Network/routeTables",
+            "apiVersion": "2023-04-01",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "environment": "poc"
+            },
+            "properties": {
+                "disableBgpRoutePropagation": false,
+                "routes": [
+                    {
+                        "name": "[concat('default-route-', parameters('locationShortName'))]",
+                        "properties": {
+                            "addressPrefix": "0.0.0.0/0",
+                            "nextHopType": "VirtualAppliance",
+                            "nextHopIpAddress": "10.0.0.4",
+                            "hasBgpOverride": false
+                        },
+                        "type": "Microsoft.Network/routeTables/routes"
+                    }
+                ]
             }
         }
     ],    
