@@ -1,0 +1,229 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "nestedTemplatesLocation": {
+            "value": "https://wvdportalstorageblob.blob.core.windows.net/galleryartifacts/armtemplates/Hostpool_1.0.02411.177/nestedTemplates/"
+        },
+        "artifactsLocation": {
+            "value": "https://wvdportalstorageblob.blob.core.windows.net/galleryartifacts/Configuration_1.0.02411.177.zip"
+        },
+        "hostpoolName": {
+            "value": "cad-avd-host-pool-a"
+        },
+        "hostpoolToken": {
+            "value": null
+        },
+        "hostpoolResourceGroup": {
+            "value": "sobpoc-avd-uswest"
+        },
+        "hostpoolLocation": {
+            "value": "westus"
+        },
+        "hostpoolProperties": {
+            "value": {
+                "agentUpdate": null,
+                "friendlyName": null,
+                "description": "Created through the Azure Virtual Desktop extension",
+                "hostPoolType": "Personal",
+                "personalDesktopAssignmentType": "Automatic",
+                "applicationGroupReferences": [
+                    "/subscriptions/f0671b50-8e13-4496-b61f-7e4c79db3c90/resourcegroups/sobpoc-avd-uswest/providers/Microsoft.DesktopVirtualization/applicationgroups/cad-avd-host-pool-a-DAG"
+                ],
+                "customRdpProperty": "drivestoredirect:s:*;audiomode:i:0;videoplaybackmode:i:1;redirectclipboard:i:1;redirectprinters:i:1;devicestoredirect:s:*;redirectcomports:i:1;redirectsmartcards:i:1;usbdevicestoredirect:s:*;enablecredsspsupport:i:1;redirectwebauthn:i:1;use multimon:i:1;",
+                "maxSessionLimit": 999999,
+                "loadBalancerType": "Persistent",
+                "validationEnvironment": false,
+                "ring": null,
+                "registrationInfo": null,
+                "vmTemplate": "{\"domain\":\"\",\"galleryImageOffer\":\"windows-11\",\"galleryImagePublisher\":\"microsoftwindowsdesktop\",\"galleryImageSKU\":\"win11-22h2-ent\",\"imageType\":\"Gallery\",\"customImageId\":null,\"namePrefix\":\"cad-avd-a\",\"osDiskType\":\"Premium_LRS\",\"vmSize\":{\"id\":\"Standard_NV6ads_A10_v5\",\"cores\":6,\"ram\":55,\"rdmaEnabled\":false,\"supportsMemoryPreservingMaintenance\":false},\"galleryItemId\":\"microsoftwindowsdesktop.windows-11win11-22h2-ent\",\"hibernate\":false,\"diskSizeGB\":0,\"securityType\":\"TrustedLaunch\",\"secureBoot\":true,\"vTPM\":true}",
+                "preferredAppGroupType": "Desktop",
+                "migrationRequest": null,
+                "cloudPcResource": false,
+                "startVMOnConnect": false,
+                "ssoadfsAuthority": null,
+                "ssoClientId": null,
+                "ssoClientSecretKeyVaultPath": null,
+                "ssoSecretType": null,
+                "objectId": "3a5c2208-0e11-45ae-acb0-9fd3a27d4b3a"
+            }
+        },
+        "vmTemplate": {
+            "value": ""
+        },
+        "administratorAccountUsername": {
+            "value": ""
+        },
+        "administratorAccountPassword": {
+            "value": null
+        },
+        "vmAdministratorAccountUsername": {
+            "value": "vmadmin"
+        },
+        "vmAdministratorAccountPassword": {
+            "value": null
+        },
+        "availabilityOption": {
+            "value": "None"
+        },
+        "availabilitySetName": {
+            "value": ""
+        },
+        "createAvailabilitySet": {
+            "value": false
+        },
+        "availabilitySetUpdateDomainCount": {
+            "value": 5
+        },
+        "availabilitySetFaultDomainCount": {
+            "value": 2
+        },
+        "availabilityZones": {
+            "value": []
+        },
+        "vmResourceGroup": {
+            "value": "sobpoc-avd-uswest"
+        },
+        "vmLocation": {
+            "value": "westus"
+        },
+        "vmSize": {
+            "value": "Standard_NV6ads_A10_v5"
+        },
+        "vmDiskSizeGB": {
+            "value": 0
+        },
+        "vmHibernate": {
+            "value": false
+        },
+        "vmInitialNumber": {
+            "value": 1
+        },
+        "vmNumberOfInstances": {
+            "value": 3
+        },
+        "vmNamePrefix": {
+            "value": "cad-avd-a"
+        },
+        "vmImageType": {
+            "value": "Gallery"
+        },
+        "vmGalleryImageOffer": {
+            "value": "windows-11"
+        },
+        "vmGalleryImagePublisher": {
+            "value": "microsoftwindowsdesktop"
+        },
+        "vmGalleryImageSKU": {
+            "value": "win11-22h2-ent"
+        },
+        "vmGalleryImageVersion": {
+            "value": ""
+        },
+        "vmGalleryImageHasPlan": {
+            "value": false
+        },
+        "vmCustomImageSourceId": {
+            "value": ""
+        },
+        "vmDiskType": {
+            "value": "Premium_LRS"
+        },
+        "existingVnetName": {
+            "value": "poc-avd-uswest"
+        },
+        "existingSubnetName": {
+            "value": "avd-pool-a"
+        },
+        "virtualNetworkResourceGroupName": {
+            "value": "sobpoc-avd-uswest"
+        },
+        "createNetworkSecurityGroup": {
+            "value": false
+        },
+        "networkSecurityGroupId": {
+            "value": ""
+        },
+        "networkSecurityGroupRules": {
+            "value": []
+        },
+        "availabilitySetTags": {
+            "value": {
+                "environment": "poc",
+                "cm-resource-parent": "/subscriptions/f0671b50-8e13-4496-b61f-7e4c79db3c90/resourceGroups/sobpoc-avd-uswest/providers/Microsoft.DesktopVirtualization/hostpools/cad-avd-host-pool-a"
+            }
+        },
+        "networkInterfaceTags": {
+            "value": {
+                "environment": "poc",
+                "cm-resource-parent": "/subscriptions/f0671b50-8e13-4496-b61f-7e4c79db3c90/resourcegroups/sobpoc-avd-uswest/providers/Microsoft.DesktopVirtualization/hostpools/cad-avd-host-pool-a"
+            }
+        },
+        "networkSecurityGroupTags": {
+            "value": {
+                "environment": "poc",
+                "cm-resource-parent": "/subscriptions/f0671b50-8e13-4496-b61f-7e4c79db3c90/resourcegroups/sobpoc-avd-uswest/providers/Microsoft.DesktopVirtualization/hostpools/cad-avd-host-pool-a"
+            }
+        },
+        "virtualMachineTags": {
+            "value": {
+                "environment": "poc",
+                "cm-resource-parent": "/subscriptions/f0671b50-8e13-4496-b61f-7e4c79db3c90/resourceGroups/sobpoc-avd-uswest/providers/Microsoft.DesktopVirtualization/hostpools/cad-avd-host-pool-a"
+            }
+        },
+        "imageTags": {
+            "value": {}
+        },
+        "deploymentId": {
+            "value": "a62e04d5-c24b-48d6-a2e3-5a1db238f312"
+        },
+        "apiVersion": {
+            "value": "2022-10-14-preview"
+        },
+        "ouPath": {
+            "value": ""
+        },
+        "domain": {
+            "value": ""
+        },
+        "aadJoin": {
+            "value": true
+        },
+        "intune": {
+            "value": true
+        },
+        "bootDiagnostics": {
+            "value": {
+                "enabled": true
+            }
+        },
+        "userAssignedIdentity": {
+            "value": ""
+        },
+        "customConfigurationScriptUrl": {
+            "value": ""
+        },
+        "systemData": {
+            "value": {
+                "aadJoinPreview": false,
+                "sessionHostConfigurationVersion": "",
+                "firstPartyExtension": false
+            }
+        },
+        "securityType": {
+            "value": "TrustedLaunch"
+        },
+        "secureBoot": {
+            "value": true
+        },
+        "vTPM": {
+            "value": true
+        },
+        "managedDiskSecurityEncryptionType": {
+            "value": "VMGuestStateOnly"
+        },
+        "integrityMonitoring": {
+            "value": false
+        }
+    }
+}

@@ -1,0 +1,12 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "firewallPolicies_avd_fw_policy_uswest_premium_1067c5_name": {
+            "value": null
+        },
+        "workspaces_shared_fwpolicy_analytics_workspace_uswest_externalid": {
+            "value": null
+        }
+    }
+}

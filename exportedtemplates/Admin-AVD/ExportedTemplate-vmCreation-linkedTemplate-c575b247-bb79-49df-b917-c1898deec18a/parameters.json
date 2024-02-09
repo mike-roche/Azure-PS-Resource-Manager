@@ -1,0 +1,165 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "artifactsLocation": {
+            "value": "https://wvdportalstorageblob.blob.core.windows.net/galleryartifacts/Configuration_1.0.02404.172.zip"
+        },
+        "availabilityOption": {
+            "value": "None"
+        },
+        "availabilitySetName": {
+            "value": ""
+        },
+        "availabilityZones": {
+            "value": []
+        },
+        "vmGalleryImageOffer": {
+            "value": "windows-11"
+        },
+        "vmGalleryImagePublisher": {
+            "value": "microsoftwindowsdesktop"
+        },
+        "vmGalleryImageHasPlan": {
+            "value": false
+        },
+        "vmGalleryImageSKU": {
+            "value": "win11-22h2-ent"
+        },
+        "vmGalleryImageVersion": {
+            "value": ""
+        },
+        "rdshPrefix": {
+            "value": "admin-avd-a-"
+        },
+        "rdshNumberOfInstances": {
+            "value": 2
+        },
+        "rdshVMDiskType": {
+            "value": "Premium_LRS"
+        },
+        "rdshVmSize": {
+            "value": "Standard_D2s_v3"
+        },
+        "rdshVmDiskSizeGB": {
+            "value": 0
+        },
+        "rdshHibernate": {
+            "value": false
+        },
+        "enableAcceleratedNetworking": {
+            "value": false
+        },
+        "administratorAccountUsername": {
+            "value": ""
+        },
+        "administratorAccountPassword": {
+            "value": null
+        },
+        "vmAdministratorAccountUsername": {
+            "value": "vmadmin"
+        },
+        "vmAdministratorAccountPassword": {
+            "value": null
+        },
+        "vhds": {
+            "value": "vhds/admin-avd-a-"
+        },
+        "subnet-id": {
+            "value": "/subscriptions/f0671b50-8e13-4496-b61f-7e4c79db3c90/resourceGroups/sobpoc-avd-uswest/providers/Microsoft.Network/virtualNetworks/poc-avd-uswest/subnets/avd-pool-a"
+        },
+        "rdshImageSourceId": {
+            "value": ""
+        },
+        "location": {
+            "value": "westus"
+        },
+        "createNetworkSecurityGroup": {
+            "value": false
+        },
+        "networkSecurityGroupId": {
+            "value": ""
+        },
+        "networkSecurityGroupRules": {
+            "value": []
+        },
+        "networkInterfaceTags": {
+            "value": {
+                "environment": "poc",
+                "cm-resource-parent": "/subscriptions/f0671b50-8e13-4496-b61f-7e4c79db3c90/resourceGroups/sobpoc-avd-uswest/providers/Microsoft.DesktopVirtualization/admin-avd-host-pool-a"
+            }
+        },
+        "networkSecurityGroupTags": {
+            "value": {
+                "environment": "poc",
+                "cm-resource-parent": "/subscriptions/f0671b50-8e13-4496-b61f-7e4c79db3c90/resourceGroups/sobpoc-avd-uswest/providers/Microsoft.DesktopVirtualization/admin-avd-host-pool-a"
+            }
+        },
+        "virtualMachineTags": {
+            "value": {
+                "environment": "poc",
+                "cm-resource-parent": "/subscriptions/f0671b50-8e13-4496-b61f-7e4c79db3c90/resourceGroups/sobpoc-avd-uswest/providers/Microsoft.DesktopVirtualization/admin-avd-host-pool-a"
+            }
+        },
+        "imageTags": {
+            "value": {}
+        },
+        "vmInitialNumber": {
+            "value": 0
+        },
+        "hostpoolToken": {
+            "value": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjQ4Q0Y2MjhENTM5OUYzNTMwQkM5MzI0RjgyMzVFNEY1RkEyOTQxNkIiLCJ0eXAiOiJKV1QifQ.eyJSZWdpc3RyYXRpb25JZCI6ImYzYjQ3ZDc2LTg4MTctNGExOS1iMzY2LTY2NGI2MjYwOWYyOSIsIkJyb2tlclVyaSI6Imh0dHBzOi8vcmRicm9rZXItZy11cy1yMC53dmQubWljcm9zb2Z0LmNvbS8iLCJEaWFnbm9zdGljc1VyaSI6Imh0dHBzOi8vcmRkaWFnbm9zdGljcy1nLXVzLXIwLnd2ZC5taWNyb3NvZnQuY29tLyIsIkVuZHBvaW50UG9vbElkIjoiMjMwMDAxYmYtYTljNC00ZGM1LThiNzktODIwMWM4YTAyNWY4IiwiR2xvYmFsQnJva2VyVXJpIjoiaHR0cHM6Ly9yZGJyb2tlci53dmQubWljcm9zb2Z0LmNvbS8iLCJHZW9ncmFwaHkiOiJVUyIsIkdsb2JhbEJyb2tlclJlc291cmNlSWRVcmkiOiJodHRwczovLzIzMDAwMWJmLWE5YzQtNGRjNS04Yjc5LTgyMDFjOGEwMjVmOC5yZGJyb2tlci53dmQubWljcm9zb2Z0LmNvbS8iLCJCcm9rZXJSZXNvdXJjZUlkVXJpIjoiaHR0cHM6Ly8yMzAwMDFiZi1hOWM0LTRkYzUtOGI3OS04MjAxYzhhMDI1ZjgucmRicm9rZXItZy11cy1yMC53dmQubWljcm9zb2Z0LmNvbS8iLCJEaWFnbm9zdGljc1Jlc291cmNlSWRVcmkiOiJodHRwczovLzIzMDAwMWJmLWE5YzQtNGRjNS04Yjc5LTgyMDFjOGEwMjVmOC5yZGRpYWdub3N0aWNzLWctdXMtcjAud3ZkLm1pY3Jvc29mdC5jb20vIiwiQUFEVGVuYW50SWQiOiI0MGVmMTFkNC04ZjY4LTRkZWItYjE3Mi1hOTE3M2M2NDQwNTUiLCJuYmYiOjE2OTE3MDgwMDgsImV4cCI6MTY5MTc5NDM1OSwiaXNzIjoiUkRJbmZyYVRva2VuTWFuYWdlciIsImF1ZCI6IlJEbWkifQ.cnN2OtqZtLfho1U3f814JL32DL4y23S-9Yv1urzqB2UTjekrekbnniB1Ti3yu75okdWoDsUpCOLYooe4gR5ZwKelMtLJK5BjFf3rXDK9o9vVfNeWLofAD840Og0KRYvHsIs4kvQVIB8CQJJYORXOBLXmp91my1qe5g4LYmubhVZbIUArDkh3a1sgz7PnElNy8GtuacSGiBO5ap94UH9dp2rsRVL4vJe2RmQx8BjFOi50a4WSyTLVG2oM9_YL2HrIGgBCPiGR9triMpqSBirHvUam3d8aaw9zmR2rcKNx3noGKnAMhO7DCuvhe5W54kXpn_BYAoPPH1PTSnC36kKlQw"
+        },
+        "hostpoolName": {
+            "value": "admin-avd-host-pool-a"
+        },
+        "ouPath": {
+            "value": ""
+        },
+        "domain": {
+            "value": ""
+        },
+        "aadJoin": {
+            "value": true
+        },
+        "intune": {
+            "value": true
+        },
+        "bootDiagnostics": {
+            "value": {
+                "enabled": true
+            }
+        },
+        "userAssignedIdentity": {
+            "value": ""
+        },
+        "customConfigurationScriptUrl": {
+            "value": ""
+        },
+        "sessionHostConfigurationVersion": {
+            "value": ""
+        },
+        "systemData": {
+            "value": {
+                "aadJoinPreview": false,
+                "sessionHostConfigurationVersion": "",
+                "firstPartyExtension": false
+            }
+        },
+        "securityType": {
+            "value": "TrustedLaunch"
+        },
+        "secureBoot": {
+            "value": true
+        },
+        "vTPM": {
+            "value": true
+        },
+        "integrityMonitoring": {
+            "value": false
+        },
+        "managedDiskSecurityEncryptionType": {
+            "value": "VMGuestStateOnly"
+        }
+    }
+}

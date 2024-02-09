@@ -1,0 +1,20 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "resources": [
+        {
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "apiVersion": "2019-02-01",
+            "name": "cad-avd-a-nsg-a62e04d5-c24b-48d6-a2e3-5a1db238f27b",
+            "location": "westus",
+            "tags": {
+                "environment": "poc",
+                "cm-resource-parent": "/subscriptions/f0671b50-8e13-4496-b61f-7e4c79db3c90/resourceGroups/sobpoc-avd-uswest/providers/Microsoft.DesktopVirtualization/cad-avd-host-pool-a"
+            },
+            "properties": {
+                "securityRules": []
+            },
+            "condition": false
+        }
+    ]
+}

@@ -1,0 +1,38 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "resources": [
+        {
+            "type": "Microsoft.DesktopVirtualization/hostpools",
+            "apiVersion": "2022-10-14-preview",
+            "name": "cad-avd-host-pool-a",
+            "location": "westus",
+            "properties": {
+                "agentUpdate": null,
+                "friendlyName": null,
+                "description": "Created through the Azure Virtual Desktop extension",
+                "hostPoolType": "Personal",
+                "personalDesktopAssignmentType": "Automatic",
+                "applicationGroupReferences": [
+                    "/subscriptions/f0671b50-8e13-4496-b61f-7e4c79db3c90/resourcegroups/sobpoc-avd-uswest/providers/Microsoft.DesktopVirtualization/applicationgroups/cad-avd-host-pool-a-DAG"
+                ],
+                "customRdpProperty": "drivestoredirect:s:;audiomode:i:0;videoplaybackmode:i:1;redirectclipboard:i:0;redirectprinters:i:1;devicestoredirect:s:;redirectcomports:i:0;redirectsmartcards:i:0;usbdevicestoredirect:s:;enablecredsspsupport:i:1;redirectwebauthn:i:1;use multimon:i:1;enablerdsaadauth:i:1;audiocapturemode:i:1;camerastoredirect:s:*;dynamic resolution:i:1;",
+                "maxSessionLimit": 999999,
+                "loadBalancerType": "Persistent",
+                "validationEnvironment": false,
+                "ring": null,
+                "registrationInfo": null,
+                "vmTemplate": "{\"domain\":\"\",\"galleryImageOffer\":\"windows-11\",\"galleryImagePublisher\":\"microsoftwindowsdesktop\",\"galleryImageSKU\":\"win11-22h2-ent\",\"imageType\":\"Gallery\",\"customImageId\":null,\"namePrefix\":\"cad-avd-a\",\"osDiskType\":\"Premium_LRS\",\"vmSize\":{\"id\":\"Standard_NV6ads_A10_v5\",\"cores\":6,\"ram\":55,\"rdmaEnabled\":false,\"supportsMemoryPreservingMaintenance\":false},\"galleryItemId\":\"microsoftwindowsdesktop.windows-11win11-22h2-ent\",\"hibernate\":false,\"diskSizeGB\":0,\"securityType\":\"TrustedLaunch\",\"secureBoot\":true,\"vTPM\":true}",
+                "preferredAppGroupType": "Desktop",
+                "migrationRequest": null,
+                "cloudPcResource": false,
+                "startVMOnConnect": false,
+                "ssoadfsAuthority": null,
+                "ssoClientId": null,
+                "ssoClientSecretKeyVaultPath": null,
+                "ssoSecretType": null,
+                "objectId": "3a5c2208-0e11-45ae-acb0-9fd3a27d4b3a"
+            }
+        }
+    ]
+}

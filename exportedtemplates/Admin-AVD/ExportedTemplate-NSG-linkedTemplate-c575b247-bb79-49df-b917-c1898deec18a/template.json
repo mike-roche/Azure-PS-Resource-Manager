@@ -1,0 +1,20 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "resources": [
+        {
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "apiVersion": "2019-02-01",
+            "name": "admin-avd-a-nsg-c575b247-bb79-49df-b917-c1898deec18a",
+            "location": "westus",
+            "tags": {
+                "environment": "poc",
+                "cm-resource-parent": "/subscriptions/f0671b50-8e13-4496-b61f-7e4c79db3c90/resourceGroups/sobpoc-avd-uswest/providers/Microsoft.DesktopVirtualization/admin-avd-host-pool-a"
+            },
+            "properties": {
+                "securityRules": []
+            },
+            "condition": false
+        }
+    ]
+}

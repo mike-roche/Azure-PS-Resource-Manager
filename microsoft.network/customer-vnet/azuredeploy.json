@@ -25,7 +25,11 @@
                 "wcu",
                 "wu1",
                 "wu2",
-                "wu3"
+                "wu3",
+                "ua",
+                "ut",
+                "uv"
+
             ],
             "type": "string",
             "metadata": {
@@ -72,9 +76,6 @@
                 "description": "The network addresses for the virtual network."
             }
         }
-    },
-    "variables" :{
-        "parentResourceGroup": "[resourceGroup().name]"
     },
     "resources": [
         // analytics workspace
@@ -220,12 +221,12 @@
             },
             "properties": {
                 "workspaceId": "[resourceId('Microsoft.OperationalInsights/workspaces', concat('log-', parameters('customerShortName'), '-vnet-', parameters('locationShortName'), '-1'))]",
-                "logs": [
+            /*    "logs": [
                     {
                         "category": "VMProtectionAlerts",
                         "enabled": true
                     }
-                ],
+                ], */
                 "metrics": [
                     {
                         "category": "AllMetrics",
@@ -355,12 +356,12 @@
             },
             "properties": {
                 "workspaceId": "[resourceId('Microsoft.OperationalInsights/workspaces', concat('log-', parameters('customerShortName'), '-vnet-', parameters('locationShortName'), '-1'))]",
-                "logs": [
+            /*  "logs": [
                     {
                         "category": "VMProtectionAlerts",
                         "enabled": true
                     }
-                ],
+                ], */
                 "metrics": [
                     {
                         "category": "AllMetrics",

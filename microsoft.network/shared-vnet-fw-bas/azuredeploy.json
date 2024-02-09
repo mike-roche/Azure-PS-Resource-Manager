@@ -31,7 +31,11 @@
                 "wcu",
                 "wu1",
                 "wu2",
-                "wu3"
+                "wu3",
+                "ua",
+                "ut",
+                "uv"
+
             ],
             "type": "string",
             "metadata": {
@@ -64,12 +68,12 @@
             "location": "[resourceGroup().location]",
             "tags": {
                 "displayName": "[concat('vnet-shd-', parameters('locationShortName'), '-1')]",
-                "environment": "poc",
+                "environment": "prod",
                 "application": "shared" 
             },
-            "dependsOn": [
+            /*"dependsOn": [
                 "[resourceId('Microsoft.Network/routeTables', concat('rt-shd-', parameters('locationShortName'),'-1'))]"
-            ],
+            ],*/
             "properties": {
                 "addressSpace": {
                     "addressPrefixes": [
@@ -77,7 +81,7 @@
                     ]
                 },
                 "subnets": [
-                    {
+                /*  {
                         "name": "[concat('snet-shd-', parameters('locationShortName'), '-1')]",
                         "properties": {
                             "addressPrefix": "[parameters('subnetAddressSpaces')[0]]",
@@ -100,7 +104,7 @@
                             "privateEndpointNetworkPolicies": "Disabled",
                             "privateLinkServiceNetworkPolicies": "Enabled"
                         }
-                    },
+                    }, */
                     {
                         "name": "AzureFirewallSubnet",
                         "properties": {
@@ -117,6 +121,42 @@
                 "enableDdosProtection": "[parameters('ddosProtectionPlanEnabled')]"
             }
         },
+        //subnet 1
+        {
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "apiVersion": "2023-04-01",
+            "name": "[concat('vnet-shd-', parameters('locationShortName'), '-1/snet-shd-', parameters('locationShortName'), '-1')]",
+            "properties": {
+                "addressPrefix": "[parameters('subnetAddressSpaces')[0]]",
+                "routeTable": {
+                    "id": "[resourceId('Microsoft.Network/routeTables', concat('rt-shd-', parameters('locationShortName'),'-1'))]"
+                },
+                "delegations": [],
+                "privateEndpointNetworkPolicies": "Disabled",
+                "privateLinkServiceNetworkPolicies": "Enabled"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/routeTables', concat('rt-shd-', parameters('locationShortName'),'-1'))]"
+            ]
+        },
+        //subnet 2
+        {
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "apiVersion": "2023-04-01",
+            "name": "[concat('vnet-shd-', parameters('locationShortName'), '-1/snet-shd-', parameters('locationShortName'), '-2')]",
+            "properties": {
+                "addressPrefix": "[parameters('subnetAddressSpaces')[1]]",
+                "routeTable": {
+                    "id": "[resourceId('Microsoft.Network/routeTables', concat('rt-shd-', parameters('locationShortName'),'-1'))]"
+                },
+                "delegations": [],
+                "privateEndpointNetworkPolicies": "Disabled",
+                "privateLinkServiceNetworkPolicies": "Enabled"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/routeTables', concat('rt-shd-', parameters('locationShortName'),'-1'))]"
+            ]
+        },
         // firewall
         {
             "name": "[concat('afw-shd-', parameters('locationShortName'),'-1')]",
@@ -124,7 +164,7 @@
             "apiVersion": "2023-04-01",
             "location": "[resourceGroup().location]",
             "tags": {
-                "environment": "poc",
+                "environment": "prod",
                 "application": "shared"
             },
             "properties": {
@@ -169,7 +209,7 @@
             "tags": {
                 "displayName": "[concat('pip-shd-', parameters('locationShortName'),'-1')]",
                 "createdFor": "[concat('afw-shd-', parameters('locationShortName'),'-1')]",
-                "environment": "poc",
+                "environment": "prod",
                 "application": "shared"
             },
             "properties": {
@@ -186,7 +226,7 @@
             "apiVersion": "2023-04-01",
             "location": "[resourceGroup().location]",
             "tags": {
-                "environment": "poc",
+                "environment": "prod",
                 "application": "shared"
             },
             "properties": {
@@ -222,12 +262,12 @@
         },
         // rule collection group
         {
-            "name": "[concat('waf-shd-', parameters('locationShortName'), '-1/','wafrg-shd-', parameters('locationShortName'), '-1')]",
+            "name": "[concat('waf-shd-', parameters('locationShortName'), '-1/wafrg-shd-', parameters('locationShortName'), '-1')]",
             "type": "Microsoft.Network/firewallPolicies/ruleCollectionGroups",
             "apiVersion": "2023-05-01",
             "location": "[resourceGroup().location]",
             "tags": {
-                "environment": "poc",
+                "environment": "prod",
                 "application": "shared"
             },
             "properties": {
@@ -378,7 +418,7 @@
             "apiVersion": "2021-12-01-preview",
             "location": "[resourceGroup().location]",
             "tags": {
-                "environment": "poc",
+                "environment": "prod",
                 "application": "shared"
             },
             "properties": {
@@ -403,7 +443,7 @@
             "apiVersion": "2023-04-01",
             "location": "[resourceGroup().location]",
             "tags": {
-                "environment": "poc",
+                "environment": "prod",
                 "application": "shared"
             },
             "sku": {
@@ -448,7 +488,7 @@
             "tags": {
                 "displayName": "[concat('pip-shd-', parameters('locationShortName'),'-2')]",
                 "createdFor": "[concat('bas-shd-', parameters('locationShortName'),'-1')]",
-                "environment": "poc",
+                "environment": "prod",
                 "application": "shared"
             },
             "properties": {
@@ -465,7 +505,7 @@
             "apiVersion": "2023-04-01",
             "location": "[resourceGroup().location]",
             "tags": {
-                "environment": "poc"
+                "environment": "prod"
             },
             "properties": {
                 "disableBgpRoutePropagation": false,
@@ -475,7 +515,7 @@
                         "properties": {
                             "addressPrefix": "0.0.0.0/0",
                             "nextHopType": "VirtualAppliance",
-                            "nextHopIpAddress": "10.0.0.4",
+                            "nextHopIpAddress": "[reference(resourceId('Microsoft.Network/azureFirewalls', concat('afw-shd-', parameters('locationShortName'),'-1'))).ipConfigurations[0].properties.privateIPAddress]",
                             "hasBgpOverride": false
                         },
                         "type": "Microsoft.Network/routeTables/routes"

@@ -1,0 +1,19 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "resources": [
+        {
+            "type": "Microsoft.DesktopVirtualization/workspaces",
+            "apiVersion": "2022-10-14-preview",
+            "name": "admin-avd-workspace-uswest",
+            "location": "westus",
+            "tags": {},
+            "properties": {
+                "applicationGroupReferences": [
+                    "/subscriptions/f0671b50-8e13-4496-b61f-7e4c79db3c90/resourceGroups/sobpoc-avd-uswest/providers/Microsoft.DesktopVirtualization/applicationgroups/admin-avd-host-pool-a-DAG"
+                ],
+                "publicNetworkAccess": "Enabled"
+            }
+        }
+    ]
+}
