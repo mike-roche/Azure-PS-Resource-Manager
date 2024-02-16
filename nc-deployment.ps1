@@ -56,10 +56,11 @@ New-AzResourceGroupDeployment @DeploymentParams
 
 
 $ParameterObject = @{
-    hostpoolName = "avd-hpl-admin-eu2-1"
+    hostpoolName = "avd-hpl-admin-eu2-2"
     hostpoolDescription = "Created through the Azure Virtual Desktop extension"
+    hostpoolDiagnosticSettingsLogAnalyticsWorkspaceName = 'log-nc-avd-eu1-2'
     location = $Location
-    workSpaceName = 'avd-wks-eu2-1'
+    workSpaceName = 'avd-wks-eu2-2'
     workspaceLocation = $Location
     workspaceResourceGroup = $SharedResourceGroupName
     isNewWorkspace = $true
@@ -72,7 +73,7 @@ $ParameterObject = @{
     vmDiskSizeGB = 0
     vmHibernate = $false
     vmNumberOfInstances = 1
-    vmNamePrefix = 'avd-vm-admin'
+    vmNamePrefix = 'avd-vm-admin2'
     vmImageType = 'Gallery'
     vmGalleryImageOffer = 'windows-11'
     vmGalleryImagePublisher = 'microsoftwindowsdesktop'
@@ -114,7 +115,8 @@ $ParameterObject = @{
     networkInterfaceTags = @{environment = 'admin'}
     networkSecurityGroupTags = @{environment = 'admin'}
     virtualMachineTags = @{environment = 'admin'}
-    apiVersion = "2022-10-14-preview"
+    apiVersion = '2022-10-14-preview'
+    deploymentId = 'admin-avd-hostpool2'
     aadJoin = $true
     intune = $true
     bootDiagnostics = @{enabled = $true}
@@ -127,9 +129,9 @@ $ParameterObject = @{
     vTPM = $true
 }
 $DeploymentParams = @{
-    Name ='admin-avd-hostpool'
+    Name ='admin-avd-hostpool2'
     ResourceGroupName = $SharedResourceGroupName
-    TemplateFile = 'C:\Scripts\GitHub\Azure-PS-Resource-Manager\microsoft.compute\azure-virtual-desktop\host-pool\draft.json'
+    TemplateFile = 'C:\GitHub\Azure-PS-Resource-Manager\microsoft.compute\azure-virtual-desktop\host-pool\azuredeploy.json'
     TemplateParameterObject = $ParameterObject
 }
 New-AzResourceGroupDeployment @DeploymentParams

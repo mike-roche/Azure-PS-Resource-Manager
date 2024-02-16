@@ -7,7 +7,7 @@
         "metadata": {
           "description": "The base URI where artifacts required by this template are located."
         },
-        "defaultValue": "https://raw.githubusercontent.com/Azure/RDS-Templates/master/ARM-wvd-templates/nestedtemplates/"
+        "defaultValue": "https://raw.githubusercontent.com/NetworkCoverage/Azure-PS-Resource-Manager/main/microsoft.compute/azure-virtual-desktop/nestedtemplates/" //"https://raw.githubusercontent.com/Azure/RDS-Templates/master/ARM-wvd-templates/nestedtemplates/"
       },
       "artifactsLocation": {
         "type": "string",
@@ -866,12 +866,12 @@
       },
       {
         "apiVersion": "2018-05-01",
-        "name": "[concat(parameters('deploymentId'), '-vm', )]",
+        "name": "[concat(parameters('deploymentId'), '-vm')]",
         "type": "Microsoft.Resources/deployments",
         "condition": "[variables('createVMs')]",
         "resourceGroup": "[parameters('vmResourceGroup')]",
         "dependsOn": [
-          "[concat('AVSet-linkedTemplate-', parameters('deploymentId'))]"
+          "[concat(parameters('deploymentId'), '-avset')]"
         ],
         "properties": {
           "mode": "Incremental",
@@ -959,7 +959,7 @@
               "value": "[parameters('createNetworkSecurityGroup')]"
             },
             "nsgDeploymentName": {
-              "value": "[concat(parameters('deploymentId'), '-nsg', )]"
+              "value": "[concat(parameters('deploymentId'), '-nsg')]"
             },
             "networkSecurityGroupId": {
               "value": "[parameters('networkSecurityGroupId')]"
@@ -1078,7 +1078,7 @@
           "logs": "[variables('workspaceDiagnosticSettingsLogProperties')]"
         },
         "dependsOn": [
-          "[concat('Workspace-linkedTemplate-', parameters('deploymentId'))]"
+          "[concat(parameters('deploymentId'), '-workspace')]"
         ]
       }
     ],
