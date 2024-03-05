@@ -1,0 +1,66 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "value": "eastus2"
+        },
+        "networkInterfaceName": {
+            "value": "avd-gld-img-0167"
+        },
+        "enableAcceleratedNetworking": {
+            "value": true
+        },
+        "subnetName": {
+            "value": "snet-shd-eu2-1"
+        },
+        "virtualNetworkId": {
+            "value": "/subscriptions/7e636463-ae90-4544-b221-d61fc5233e09/resourceGroups/rg-shd-eu2-1/providers/Microsoft.Network/virtualNetworks/vnet-shd-eu2-1"
+        },
+        "virtualMachineName": {
+            "value": "avd-gld-img-0"
+        },
+        "virtualMachineComputerName": {
+            "value": "avd-gld-img-0"
+        },
+        "virtualMachineRG": {
+            "value": "rg-shd-eu2-1"
+        },
+        "osDiskType": {
+            "value": "Premium_LRS"
+        },
+        "osDiskDeleteOption": {
+            "value": "Delete"
+        },
+        "virtualMachineSize": {
+            "value": "Standard_D2s_v3"
+        },
+        "nicDeleteOption": {
+            "value": "Delete"
+        },
+        "hibernationEnabled": {
+            "value": false
+        },
+        "adminUsername": {
+            "value": "vmadmin"
+        },
+        "adminPassword": {
+            "value": null
+        },
+        "patchMode": {
+            "value": "AutomaticByOS"
+        },
+        "enableHotpatching": {
+            "value": false
+        },
+        "securityType": {
+            "value": "TrustedLaunch"
+        },
+        "secureBoot": {
+            "value": true
+        },
+        "vTPM": {
+            "value": true
+        }
+    }
+}

@@ -1,0 +1,77 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "galleryName": {
+            "value": "galcadshduv1"
+        },
+        "location": {
+            "value": "usgovvirginia"
+        },
+        "publisher": {
+            "value": "microsoftwindowsdesktop"
+        },
+        "offer": {
+            "value": "windows-11"
+        },
+        "sku": {
+            "value": "win11-22h2-avd"
+        },
+        "osState": {
+            "value": "Generalized"
+        },
+        "osType": {
+            "value": "Windows"
+        },
+        "hyperVGeneration": {
+            "value": "V2"
+        },
+        "securityType": {
+            "value": "TrustedLaunch"
+        },
+        "isAcceleratedNetworkSupported": {
+            "value": true
+        },
+        "minRecommendedvCPUs": {
+            "value": 1
+        },
+        "maxRecommendedvCPUs": {
+            "value": 16
+        },
+        "minRecommendedMemory": {
+            "value": 1
+        },
+        "maxRecommendedMemory": {
+            "value": 32
+        },
+        "imageDefinitionName": {
+            "value": "gimgcadshduv1"
+        },
+        "versionName": {
+            "value": "0.0.1"
+        },
+        "sourceVmId": {
+            "value": "/subscriptions/a4c682c0-bbc9-4138-9ec6-ed1359f1664b/resourceGroups/RG-SHD-UV-1/providers/Microsoft.Compute/virtualMachines/avd-gld-img-0"
+        },
+        "defaultReplicaCount": {
+            "value": 1
+        },
+        "excludedFromLatest": {
+            "value": false
+        },
+        "regionReplications": {
+            "value": [
+                {
+                    "name": "usgovvirginia",
+                    "regionalReplicaCount": 1,
+                    "storageAccountType": "Premium_LRS"
+                },
+                {
+                    "name": "usgovarizona",
+                    "regionalReplicaCount": 1,
+                    "storageAccountType": "Standard_LRS"
+                }
+            ]
+        }
+    }
+}

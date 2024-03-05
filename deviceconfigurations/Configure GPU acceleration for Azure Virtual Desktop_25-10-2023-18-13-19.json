@@ -4,47 +4,41 @@
     "platforms":  "windows10",
     "technologies":  "mdm",
     "settings":  [
-                     {
-                         "settingInstance":  {
-                                                 "@odata.type":  "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
-                                                 "settingDefinitionId":  "device_vendor_msft_policy_config_admx_terminalserver_ts_server_avc_hw_encode_preferred",
-                                                 "settingInstanceTemplateReference":  null,
-                                                 "choiceSettingValue":  {
-                                                                            "settingValueTemplateReference":  null,
-                                                                            "value":  "device_vendor_msft_policy_config_admx_terminalserver_ts_server_avc_hw_encode_preferred_1",
-                                                                            "children":  [
-
-                                                                                         ]
-                                                                        }
-                                             }
-                     },
-                     {
-                         "settingInstance":  {
-                                                 "@odata.type":  "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
-                                                 "settingDefinitionId":  "device_vendor_msft_policy_config_admx_terminalserver_ts_server_avc444_mode_preferred",
-                                                 "settingInstanceTemplateReference":  null,
-                                                 "choiceSettingValue":  {
-                                                                            "settingValueTemplateReference":  null,
-                                                                            "value":  "device_vendor_msft_policy_config_admx_terminalserver_ts_server_avc444_mode_preferred_1",
-                                                                            "children":  [
-
-                                                                                         ]
-                                                                        }
-                                             }
-                     },
-                     {
-                         "settingInstance":  {
-                                                 "@odata.type":  "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
-                                                 "settingDefinitionId":  "device_vendor_msft_policy_config_admx_terminalserver_ts_dx_use_full_hwgpu",
-                                                 "settingInstanceTemplateReference":  null,
-                                                 "choiceSettingValue":  {
-                                                                            "settingValueTemplateReference":  null,
-                                                                            "value":  "device_vendor_msft_policy_config_admx_terminalserver_ts_dx_use_full_hwgpu_1",
-                                                                            "children":  [
-
-                                                                                         ]
-                                                                        }
-                                             }
-                     }
-                 ]
+        {
+            "settingInstance":  {
+                "@odata.type":  "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+                "settingDefinitionId":  "device_vendor_msft_policy_config_admx_terminalserver_ts_server_avc_hw_encode_preferred",
+                "settingInstanceTemplateReference":  null,
+                "choiceSettingValue":  {
+                    "settingValueTemplateReference":  null,
+                    "value":  "device_vendor_msft_policy_config_admx_terminalserver_ts_server_avc_hw_encode_preferred_1",
+                    "children":  [ ]
+                }
+            }
+        },
+        {
+            "settingInstance":  {
+                "@odata.type":  "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+                "settingDefinitionId":  "device_vendor_msft_policy_config_admx_terminalserver_ts_server_avc444_mode_preferred",
+                "settingInstanceTemplateReference":  null,
+                "choiceSettingValue":  {
+                    "settingValueTemplateReference":  null,
+                    "value":  "device_vendor_msft_policy_config_admx_terminalserver_ts_server_avc444_mode_preferred_1",
+                    "children":  [ ]
+                }
+            }
+        },
+        {
+            "settingInstance":  {
+                "@odata.type":  "#microsoft.graph.deviceManagementConfigurationChoiceSettingInstance",
+                "settingDefinitionId":  "device_vendor_msft_policy_config_admx_terminalserver_ts_dx_use_full_hwgpu",
+                "settingInstanceTemplateReference":  null,
+                "choiceSettingValue":  {
+                    "settingValueTemplateReference":  null,
+                    "value":  "device_vendor_msft_policy_config_admx_terminalserver_ts_dx_use_full_hwgpu_1",
+                    "children":  [ ]
+                }
+            }
+        }
+    ]
 }

@@ -7,7 +7,7 @@
         "metadata": {
           "description": "The base URI where artifacts required by this template are located."
         },
-        "defaultValue": "https://raw.githubusercontent.com/NetworkCoverage/Azure-PS-Resource-Manager/main/microsoft.compute/azure-virtual-desktop/nestedtemplates/" //"https://raw.githubusercontent.com/Azure/RDS-Templates/master/ARM-wvd-templates/nestedtemplates/"
+        "defaultValue": "https://raw.githubusercontent.com/Azure/RDS-Templates/master/ARM-wvd-templates/nestedtemplates/"
       },
       "artifactsLocation": {
         "type": "string",
@@ -642,7 +642,7 @@
           }
         ]
       },
-      "appGroupName": "[concat(variables('hostpoolName'),'-DAG')]",
+      "appGroupName": "[concat('dag-', variables('hostpoolName'))]",
       "appGroupResourceId": "[createArray(resourceId('Microsoft.DesktopVirtualization/applicationgroups/', variables('appGroupName')))]",
       "workspaceResourceGroup": "[if(empty(parameters('workspaceResourceGroup')), resourceGroup().name, parameters('workspaceResourceGroup'))]",
       "applicationGroupReferencesArr": "[if(equals('',parameters('allApplicationGroupReferences')), variables('appGroupResourceId'), concat(split(parameters('allApplicationGroupReferences'),','), variables('appGroupResourceId')))]",
@@ -691,11 +691,13 @@
           "count": "[length(parameters('hostpoolDiagnosticSettingsLogCategories'))]",
           "input": {
             "category": "[parameters('hostpoolDiagnosticSettingsLogCategories')[copyIndex('hostpoolDiagnosticSettingsLogProperties')]]",
-            "enabled": true,
-            "retentionPolicy": {
+            "enabled": true
+            // Storage retention via diagnostic settings is being deprecated and new rules can no longer be configured. The below configuration results in error "Diagnostic settings does not support retention for new diagnostic settings"
+            //https://github.com/hashicorp/terraform-provider-azurerm/issues/23051
+            /* "retentionPolicy": {
               "enabled": true,
               "days": 30
-            }
+            } */
           }
         },
         {
@@ -703,11 +705,12 @@
           "count": "[length(parameters('appGroupDiagnosticSettingsLogCategories'))]",
           "input": {
             "category": "[parameters('appGroupDiagnosticSettingsLogCategories')[copyIndex('appGroupDiagnosticSettingsLogProperties')]]",
-            "enabled": true,
-            "retentionPolicy": {
+            "enabled": true
+            // Storage retention via diagnostic settings is being deprecated and new rules can no longer be configured. The below configuration results in error "Diagnostic settings does not support retention for new diagnostic settings"
+            /* "retentionPolicy": {
               "enabled": true,
               "days": 30
-            }
+            } */
           }
         },
         {
@@ -715,11 +718,12 @@
           "count": "[length(parameters('workspaceDiagnosticSettingsLogCategories'))]",
           "input": {
             "category": "[parameters('workspaceDiagnosticSettingsLogCategories')[copyIndex('workspaceDiagnosticSettingsLogProperties')]]",
-            "enabled": true,
-            "retentionPolicy": {
+            "enabled": true
+            // Storage retention via diagnostic settings is being deprecated and new rules can no longer be configured. The below configuration results in error "Diagnostic settings does not support retention for new diagnostic settings"
+            /* "retentionPolicy": {
               "enabled": true,
               "days": 30
-            }
+            } */
           }
         }
       ]
@@ -957,9 +961,6 @@
             },
             "createNetworkSecurityGroup": {
               "value": "[parameters('createNetworkSecurityGroup')]"
-            },
-            "nsgDeploymentName": {
-              "value": "[concat(parameters('deploymentId'), '-nsg')]"
             },
             "networkSecurityGroupId": {
               "value": "[parameters('networkSecurityGroupId')]"

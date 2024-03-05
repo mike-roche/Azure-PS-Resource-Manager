@@ -1,0 +1,232 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "hciArtifactsLocation": {
+            "value": "https://wvdportalstorageblob.blob.core.windows.net/galleryartifacts/HCIScripts_1.0.02599.267/HciCustomScript.ps1"
+        },
+        "customLocationId": {
+            "value": ""
+        },
+        "virtualProcessorCount": {
+            "value": null
+        },
+        "memoryMB": {
+            "value": 0
+        },
+        "maximumMemoryMB": {
+            "value": 0
+        },
+        "minimumMemoryMB": {
+            "value": 0
+        },
+        "dynamicMemoryConfig": {
+            "value": false
+        },
+        "vmInfrastructureType": {
+            "value": "Cloud"
+        },
+        "artifactsLocation": {
+            "value": "https://wvdportalstorageblob.blob.core.windows.net/galleryartifacts/Configuration_1.0.02599.267.zip"
+        },
+        "intune": {
+            "value": true
+        },
+        "hostpoolName": {
+            "value": "hp-cad-avd-uv-1"
+        },
+        "hostpoolDescription": {
+            "value": "Created through the Azure Virtual Desktop extension"
+        },
+        "location": {
+            "value": "eastus"
+        },
+        "validationEnvironment": {
+            "value": false
+        },
+        "hostpoolType": {
+            "value": "Personal"
+        },
+        "loadBalancerType": {
+            "value": "Persistent"
+        },
+        "preferredAppGroupType": {
+            "value": "Desktop"
+        },
+        "publicNetworkAccess": {
+            "value": "Enabled"
+        },
+        "vmResourceGroup": {
+            "value": "rg-nc-eu2-1"
+        },
+        "vmNamePrefix": {
+            "value": "cad-avd"
+        },
+        "vmLocation": {
+            "value": "eastus2"
+        },
+        "vmExtendedLocation": {
+            "value": null
+        },
+        "vmImageType": {
+            "value": "CustomImage"
+        },
+        "vmSize": {
+            "value": "Standard_NV6ads_A10_v5"
+        },
+        "vmNumberOfInstances": {
+            "value": 1
+        },
+        "vmDiskType": {
+            "value": "Premium_LRS"
+        },
+        "vmDiskSizeGB": {
+            "value": 0
+        },
+        "vmHibernate": {
+            "value": false
+        },
+        "bootDiagnostics": {
+            "value": {
+                "enabled": true
+            }
+        },
+        "securityType": {
+            "value": "TrustedLaunch"
+        },
+        "secureBoot": {
+            "value": true
+        },
+        "vTPM": {
+            "value": true
+        },
+        "customConfigurationScriptUrl": {
+            "value": ""
+        },
+        "virtualNetworkResourceGroupName": {
+            "value": "rg-shd-eu2-1"
+        },
+        "existingVnetName": {
+            "value": "vnet-shd-eu2-1"
+        },
+        "existingSubnetName": {
+            "value": "AzureFirewallSubnet"
+        },
+        "createNetworkSecurityGroup": {
+            "value": false
+        },
+        "aadJoin": {
+            "value": true
+        },
+        "domain": {
+            "value": ""
+        },
+        "ouPath": {
+            "value": ""
+        },
+        "addToWorkspace": {
+            "value": true
+        },
+        "virtualMachineTags": {
+            "value": {
+                "cm-resource-parent": "/subscriptions/7e636463-ae90-4544-b221-d61fc5233e09/resourceGroups/rg-nc-eu2-1/providers/Microsoft.DesktopVirtualization/hp-cad-avd-uv-1"
+            }
+        },
+        "apiVersion": {
+            "value": "2022-10-14-preview"
+        },
+        "deploymentId": {
+            "value": "bdfdcc80-e8b5-475c-9d6d-daeac4af10d1"
+        },
+        "vmCustomImageSourceId": {
+            "value": "/subscriptions/7e636463-ae90-4544-b221-d61fc5233e09/resourceGroups/rg-shd-eu2-1/providers/Microsoft.Compute/galleries/galcadshdeu11/images/gmigcadshdeu11/versions/0.0.1"
+        },
+        "workspaceResourceGroup": {
+            "value": "rg-nc-eu2-1"
+        },
+        "workSpaceName": {
+            "value": "wks-cad-avd"
+        },
+        "workspaceLocation": {
+            "value": "eastus"
+        },
+        "allApplicationGroupReferences": {
+            "value": ""
+        },
+        "isNewWorkspace": {
+            "value": true
+        },
+        "personalDesktopAssignmentType": {
+            "value": "Automatic"
+        },
+        "systemData": {
+            "value": {
+                "aadJoinPreview": false,
+                "sessionHostConfigurationVersion": "",
+                "firstPartyExtension": false
+            }
+        },
+        "nestedTemplatesLocation": {
+            "value": "https://wvdportalstorageblob.blob.core.windows.net/galleryartifacts/armtemplates/Hostpool_1.0.02599.267/nestedTemplates/"
+        },
+        "tokenExpirationTime": {
+            "value": "2024-02-28T01:57:42.947Z"
+        },
+        "vmTemplate": {
+            "value": "{\"domain\":\"\",\"galleryImageOffer\":null,\"galleryImagePublisher\":null,\"galleryImageSKU\":null,\"imageType\":\"CustomImage\",\"customImageId\":\"/subscriptions/7e636463-ae90-4544-b221-d61fc5233e09/resourceGroups/rg-shd-eu2-1/providers/Microsoft.Compute/galleries/galcadshdeu11/images/gmigcadshdeu11/versions/0.0.1\",\"namePrefix\":\"cad-avd\",\"osDiskType\":\"Premium_LRS\",\"vmSize\":{\"id\":\"Standard_NV6ads_A10_v5\",\"cores\":6,\"ram\":55,\"rdmaEnabled\":false,\"supportsMemoryPreservingMaintenance\":false},\"galleryItemId\":null,\"hibernate\":false,\"diskSizeGB\":0,\"securityType\":\"TrustedLaunch\",\"secureBoot\":true,\"vTPM\":true,\"vmInfrastructureType\":\"Cloud\",\"virtualProcessorCount\":null,\"memoryGB\":null,\"maximumMemoryGB\":null,\"minimumMemoryGB\":null,\"dynamicMemoryConfig\":false}"
+        },
+        "availabilityOption": {
+            "value": "None"
+        },
+        "availabilitySetName": {
+            "value": ""
+        },
+        "createAvailabilitySet": {
+            "value": false
+        },
+        "availabilitySetUpdateDomainCount": {
+            "value": 5
+        },
+        "availabilitySetFaultDomainCount": {
+            "value": 2
+        },
+        "integrityMonitoring": {
+            "value": false
+        },
+        "availabilityZones": {
+            "value": []
+        },
+        "vmAdministratorAccountUsername": {
+            "value": "vmadmin"
+        },
+        "vmAdministratorAccountPassword": {
+            "value": null
+        },
+        "managedDiskSecurityEncryptionType": {
+            "value": "VMGuestStateOnly"
+        },
+        "availabilitySetTags": {
+            "value": {
+                "cm-resource-parent": "/subscriptions/7e636463-ae90-4544-b221-d61fc5233e09/resourceGroups/rg-nc-eu2-1/providers/Microsoft.DesktopVirtualization/hp-cad-avd-uv-1"
+            }
+        },
+        "applicationGroupTags": {
+            "value": {
+                "cm-resource-parent": "/subscriptions/7e636463-ae90-4544-b221-d61fc5233e09/resourceGroups/rg-nc-eu2-1/providers/Microsoft.DesktopVirtualization/hp-cad-avd-uv-1"
+            }
+        },
+        "hostpoolTags": {
+            "value": {}
+        },
+        "networkInterfaceTags": {
+            "value": {
+                "cm-resource-parent": "/subscriptions/7e636463-ae90-4544-b221-d61fc5233e09/resourceGroups/rg-nc-eu2-1/providers/Microsoft.DesktopVirtualization/hp-cad-avd-uv-1"
+            }
+        },
+        "networkSecurityGroupTags": {
+            "value": {
+                "cm-resource-parent": "/subscriptions/7e636463-ae90-4544-b221-d61fc5233e09/resourceGroups/rg-nc-eu2-1/providers/Microsoft.DesktopVirtualization/hp-cad-avd-uv-1"
+            }
+        }
+    }
+}

@@ -1,0 +1,226 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "hciArtifactsLocation": {
+            "value": "https://wvdportalstorageblob.blob.core.windows.net/galleryartifacts/HCIScripts_1.0.02599.267/HciCustomScript.ps1"
+        },
+        "customLocationId": {
+            "value": ""
+        },
+        "virtualProcessorCount": {
+            "value": null
+        },
+        "memoryMB": {
+            "value": 0
+        },
+        "maximumMemoryMB": {
+            "value": 0
+        },
+        "minimumMemoryMB": {
+            "value": 0
+        },
+        "dynamicMemoryConfig": {
+            "value": false
+        },
+        "vmInfrastructureType": {
+            "value": "Cloud"
+        },
+        "artifactsLocation": {
+            "value": "https://wvdportalstorageblob.blob.core.windows.net/galleryartifacts/Configuration_1.0.02599.267.zip"
+        },
+        "nestedTemplatesLocation": {
+            "value": "https://wvdportalstorageblob.blob.core.windows.net/galleryartifacts/armtemplates/Hostpool_1.0.02599.267/nestedTemplates/"
+        },
+        "hostpoolName": {
+            "value": "avd-hpl-admin-eu2-1"
+        },
+        "hostpoolProperties": {
+            "value": {
+                "agentUpdate": null,
+                "friendlyName": null,
+                "description": "Created through the Azure Virtual Desktop extension",
+                "hostPoolType": "Personal",
+                "personalDesktopAssignmentType": "Automatic",
+                "applicationGroupReferences": [
+                    "/subscriptions/7e636463-ae90-4544-b221-d61fc5233e09/resourcegroups/rg-shd-eu2-1/providers/Microsoft.DesktopVirtualization/applicationgroups/avd-hpl-admin-eu2-1-DAG"
+                ],
+                "customRdpProperty": "enablerdsaadauth:i:1;enablecredsspsupport:i:1;videoplaybackmode:i:1;audiocapturemode:i:1;audiomode:i:0;camerastoredirect:s:*;devicestoredirect:s:;drivestoredirect:s:*;redirectclipboard:i:1;redirectcomports:i:0;redirectprinters:i:1;redirectsmartcards:i:0;redirectwebauthn:i:1;usbdevicestoredirect:s:*;use multimon:i:1;dynamic resolution:i:1;",
+                "maxSessionLimit": 999999,
+                "loadBalancerType": "Persistent",
+                "validationEnvironment": false,
+                "ring": null,
+                "registrationInfo": null,
+                "vmTemplate": "{\"domain\":\"\",\"galleryImageOffer\":\"windows-11\",\"galleryImagePublisher\":\"microsoftwindowsdesktop\",\"galleryImageSKU\":\"win11-22h2-ent\",\"imageType\":\"Gallery\",\"customImageId\":null,\"namePrefix\":\"avd-admin\",\"osDiskType\":\"Premium_LRS\",\"vmSize\":{\"id\":\"Standard_D2s_v3\",\"cores\":2,\"ram\":8},\"galleryItemId\":\"microsoftwindowsdesktop.windows-11win11-22h2-ent\",\"hibernate\":false,\"diskSizeGB\":128,\"securityType\":\"TrustedLaunch\",\"secureBoot\":true,\"vTPM\":true,\"vmInfrastructureType\":\"Cloud\",\"virtualProcessorCount\":null,\"memoryGB\":null,\"maximumMemoryGB\":null,\"minimumMemoryGB\":null,\"dynamicMemoryConfig\":false}",
+                "preferredAppGroupType": "Desktop",
+                "migrationRequest": null,
+                "cloudPcResource": false,
+                "startVMOnConnect": false,
+                "ssoadfsAuthority": null,
+                "ssoClientId": null,
+                "ssoClientSecretKeyVaultPath": null,
+                "ssoSecretType": null,
+                "objectId": "d2f3edcd-18cd-477f-9b70-8f1cbd95a668"
+            }
+        },
+        "hostpoolResourceGroup": {
+            "value": "rg-shd-eu2-1"
+        },
+        "hostpoolLocation": {
+            "value": "eastus2"
+        },
+        "hostpoolToken": {
+            "value": null
+        },
+        "vmInitialNumber": {
+            "value": 0
+        },
+        "vmResourceGroup": {
+            "value": "rg-shd-eu2-1"
+        },
+        "vmLocation": {
+            "value": "eastus2"
+        },
+        "vmNamePrefix": {
+            "value": "avd-admin"
+        },
+        "vmNumberOfInstances": {
+            "value": 2
+        },
+        "vmSize": {
+            "value": "Standard_D2s_v3"
+        },
+        "vmDiskType": {
+            "value": "Premium_LRS"
+        },
+        "vmDiskSizeGB": {
+            "value": 128
+        },
+        "vmHibernate": {
+            "value": false
+        },
+        "availabilityOption": {
+            "value": "None"
+        },
+        "availabilitySetName": {
+            "value": ""
+        },
+        "createAvailabilitySet": {
+            "value": false
+        },
+        "availabilitySetUpdateDomainCount": {
+            "value": 5
+        },
+        "availabilitySetFaultDomainCount": {
+            "value": 2
+        },
+        "availabilityZones": {
+            "value": []
+        },
+        "securityType": {
+            "value": "TrustedLaunch"
+        },
+        "secureBoot": {
+            "value": true
+        },
+        "vTPM": {
+            "value": true
+        },
+        "managedDiskSecurityEncryptionType": {
+            "value": "VMGuestStateOnly"
+        },
+        "integrityMonitoring": {
+            "value": false
+        },
+        "vmImageType": {
+            "value": "Gallery"
+        },
+        "bootDiagnostics": {
+            "value": {
+                "enabled": true
+            }
+        },
+        "customConfigurationScriptUrl": {
+            "value": ""
+        },
+        "virtualNetworkResourceGroupName": {
+            "value": "rg-shd-eu2-1"
+        },
+        "existingVnetName": {
+            "value": "vnet-shd-eu2-1"
+        },
+        "existingSubnetName": {
+            "value": "snet-shd-eu2-1"
+        },
+        "createNetworkSecurityGroup": {
+            "value": false
+        },
+        "aadJoin": {
+            "value": true
+        },
+        "intune": {
+            "value": false
+        },
+        "domain": {
+            "value": ""
+        },
+        "ouPath": {
+            "value": ""
+        },
+        "vmAdministratorAccountUsername": {
+            "value": "vmadmin"
+        },
+        "vmAdministratorAccountPassword": {
+            "value": null
+        },
+        "networkInterfaceTags": {
+            "value": {
+                "environment": "test",
+                "cm-resource-parent": "/subscriptions/7e636463-ae90-4544-b221-d61fc5233e09/resourcegroups/rg-shd-eu2-1/providers/Microsoft.DesktopVirtualization/hostpools/avd-hpl-admin-eu2-1"
+            }
+        },
+        "networkSecurityGroupTags": {
+            "value": {
+                "environment": "test",
+                "cm-resource-parent": "/subscriptions/7e636463-ae90-4544-b221-d61fc5233e09/resourcegroups/rg-shd-eu2-1/providers/Microsoft.DesktopVirtualization/hostpools/avd-hpl-admin-eu2-1"
+            }
+        },
+        "availabilitySetTags": {
+            "value": {
+                "environment": "test",
+                "cm-resource-parent": "/subscriptions/7e636463-ae90-4544-b221-d61fc5233e09/resourceGroups/rg-shd-eu2-1/providers/Microsoft.DesktopVirtualization/hostpools/avd-hpl-admin-eu2-1"
+            }
+        },
+        "virtualMachineTags": {
+            "value": {
+                "environment": "test",
+                "cm-resource-parent": "/subscriptions/7e636463-ae90-4544-b221-d61fc5233e09/resourceGroups/rg-shd-eu2-1/providers/Microsoft.DesktopVirtualization/hostpools/avd-hpl-admin-eu2-1"
+            }
+        },
+        "deploymentId": {
+            "value": "9a58c942-c3d0-498d-9466-799c6aff109f"
+        },
+        "apiVersion": {
+            "value": "2022-10-14-preview"
+        },
+        "vmGalleryImageOffer": {
+            "value": "windows-11"
+        },
+        "vmGalleryImagePublisher": {
+            "value": "microsoftwindowsdesktop"
+        },
+        "vmGalleryImageSKU": {
+            "value": "win11-22h2-ent"
+        },
+        "vmGalleryImageHasPlan": {
+            "value": false
+        },
+        "systemData": {
+            "value": {
+                "aadJoinPreview": false,
+                "sessionHostConfigurationVersion": "",
+                "firstPartyExtension": false
+            }
+        }
+    }
+}

@@ -1,0 +1,138 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "scalingPlanName": {
+            "value": "scal-salas-uv-default-1"
+        },
+        "scalingPlanDescription": {
+            "value": "Default scaling plan"
+        },
+        "timezone": {
+            "value": "Eastern Standard Time"
+        },
+        "friendlyName": {
+            "value": "Default Scaling"
+        },
+        "hostpoolType": {
+            "value": "Personal"
+        },
+        "schedules": {
+            "value": [
+                {
+                    "name": "weekdays_schedule",
+                    "daysOfWeek": [
+                        "Monday",
+                        "Tuesday",
+                        "Wednesday",
+                        "Thursday",
+                        "Friday"
+                    ],
+                    "rampUpStartTime": {
+                        "hour": 7,
+                        "minute": 0
+                    },
+                    "peakStartTime": {
+                        "hour": 9,
+                        "minute": 0
+                    },
+                    "peakMinutesToWaitOnDisconnect": 0,
+                    "peakActionOnDisconnect": "None",
+                    "peakMinutesToWaitOnLogoff": 0,
+                    "peakActionOnLogoff": "None",
+                    "peakStartVMOnConnect": "Enable",
+                    "rampDownStartTime": {
+                        "hour": 20,
+                        "minute": 0
+                    },
+                    "rampDownMinutesToWaitOnDisconnect": 30,
+                    "rampDownActionOnDisconnect": "Deallocate",
+                    "rampDownMinutesToWaitOnLogoff": 15,
+                    "rampDownActionOnLogoff": "Deallocate",
+                    "rampDownStartVMOnConnect": "Enable",
+                    "rampUpAutoStartHosts": "None",
+                    "rampUpStartVMOnConnect": "Enable",
+                    "rampUpMinutesToWaitOnDisconnect": 0,
+                    "rampUpActionOnDisconnect": "None",
+                    "rampUpMinutesToWaitOnLogoff": 0,
+                    "rampUpActionOnLogoff": "None",
+                    "offPeakStartTime": {
+                        "hour": 22,
+                        "minute": 0
+                    },
+                    "offPeakMinutesToWaitOnDisconnect": 15,
+                    "offPeakActionOnDisconnect": "Deallocate",
+                    "offPeakMinutesToWaitOnLogoff": 5,
+                    "offPeakActionOnLogoff": "Deallocate",
+                    "offPeakStartVMOnConnect": "Enable"
+                },
+                {
+                    "name": "weekends_schedule",
+                    "daysOfWeek": [
+                        "Saturday",
+                        "Sunday"
+                    ],
+                    "rampUpStartTime": {
+                        "hour": 8,
+                        "minute": 0
+                    },
+                    "peakStartTime": {
+                        "hour": 9,
+                        "minute": 0
+                    },
+                    "peakMinutesToWaitOnDisconnect": 60,
+                    "peakActionOnDisconnect": "Deallocate",
+                    "peakMinutesToWaitOnLogoff": 15,
+                    "peakActionOnLogoff": "Deallocate",
+                    "peakStartVMOnConnect": "Enable",
+                    "rampDownStartTime": {
+                        "hour": 18,
+                        "minute": 0
+                    },
+                    "rampDownMinutesToWaitOnDisconnect": 30,
+                    "rampDownActionOnDisconnect": "Deallocate",
+                    "rampDownMinutesToWaitOnLogoff": 15,
+                    "rampDownActionOnLogoff": "Deallocate",
+                    "rampDownStartVMOnConnect": "Enable",
+                    "rampUpAutoStartHosts": "None",
+                    "rampUpStartVMOnConnect": "Disable",
+                    "rampUpMinutesToWaitOnDisconnect": 60,
+                    "rampUpActionOnDisconnect": "Deallocate",
+                    "rampUpMinutesToWaitOnLogoff": 15,
+                    "rampUpActionOnLogoff": "Deallocate",
+                    "offPeakStartTime": {
+                        "hour": 22,
+                        "minute": 0
+                    },
+                    "offPeakMinutesToWaitOnDisconnect": 15,
+                    "offPeakActionOnDisconnect": "Deallocate",
+                    "offPeakMinutesToWaitOnLogoff": 5,
+                    "offPeakActionOnLogoff": "Deallocate",
+                    "offPeakStartVMOnConnect": "Enable"
+                }
+            ]
+        },
+        "location": {
+            "value": "usgovvirginia"
+        },
+        "tags": {
+            "value": {}
+        },
+        "systemData": {
+            "value": {
+                "personalScalingPlanFeature": true
+            }
+        },
+        "apiVersion": {
+            "value": "2022-10-14-preview"
+        },
+        "hostpoolreferences": {
+            "value": [
+                {
+                    "hostpoolArmPath": "/subscriptions/a4c682c0-bbc9-4138-9ec6-ed1359f1664b/resourcegroups/rg-salas-uv-1/providers/Microsoft.DesktopVirtualization/hostpools/avd-hp-cad-uv-1",
+                    "scalingPlanEnabled": true
+                }
+            ]
+        }
+    }
+}

@@ -1,0 +1,135 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "scalingPlanName": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the Scaling plan to be created."
+            }
+        },
+        "scalingPlanDescription": {
+            "type": "string",
+            "metadata": {
+                "description": "The description of the Scaling plan to be created."
+            },
+            "defaultValue": ""
+        },
+        "location": {
+            "type": "string",
+            "metadata": {
+                "description": "The location where the resources will be deployed."
+            }
+        },
+        "friendlyName": {
+            "type": "string",
+            "metadata": {
+                "description": "The friendly name of the Scaling plan to be created."
+            },
+            "defaultValue": ""
+        },
+        "hostPoolType": {
+            "type": "string",
+            "metadata": {
+                "description": "The host pool type of the Scaling plan to be created."
+            },
+            "allowedValues": [
+                "Pooled",
+                "Personal"
+            ]
+        },
+        "timeZone": {
+            "type": "string",
+            "metadata": {
+                "description": "Scaling plan autoscaling triggers and Start/Stop actions will execute in the time zone selected."
+            }
+        },
+        "schedules": {
+            "type": "array",
+            "metadata": {
+                "description": "The schedules of the Scaling plan to be created."
+            }
+        },
+        "hostpoolReferences": {
+            "type": "array",
+            "metadata": {
+                "description": "The array of host pool resourceId with enabled flag."
+            },
+            "defaultValue": []
+        },
+        "exclusionTag": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the tag associated with the VMs that will be excluded from the Scaling plan."
+            },
+            "defaultValue": ""
+        },
+        "tags": {
+            "type": "object",
+            "metadata": {
+                "description": "The tags to be assigned to the Scaling plan."
+            },
+            "defaultValue": {}
+        },
+        "apiVersion": {
+            "type": "string",
+            "metadata": {
+                "description": "The AVD api version."
+            },
+            "defaultValue": "2022-07-05-preview"
+        },
+        "systemData": {
+            "type": "object",
+            "metadata": {
+                "description": "System data is used for internal purposes, such as support preview features."
+            },
+            "defaultValue": {}
+        }
+    },
+    "resources": [
+        {
+            "name": "[parameters('scalingPlanName')]",
+            "apiVersion": "[parameters('apiVersion')]",
+            "type": "Microsoft.DesktopVirtualization/scalingplans",
+            "location": "[parameters('location')]",
+            "tags": "[parameters('tags')]",
+            "properties": {
+                "friendlyName": "[parameters('friendlyName')]",
+                "description": "[parameters('scalingPlanDescription')]",
+                "hostPoolType": "[parameters('hostPoolType')]",
+                "timeZone": "[parameters('timeZone')]",
+                "exclusionTag": "[parameters('exclusionTag')]",
+                "schedules": "[if(not(parameters('systemData').personalScalingPlanFeature), parameters('schedules'), null())]",
+                "hostPoolReferences": "[parameters('hostpoolReferences')]"
+            }
+        },
+        {
+            "condition": "[and(equals(parameters('hostPoolType'), 'Pooled'), parameters('systemData').personalScalingPlanFeature)]",
+            "type": "Microsoft.DesktopVirtualization/scalingPlans/pooledSchedules",
+            "name": "[concat(parameters('scalingPlanName'), '/', parameters('schedules')[copyIndex()].name)]",
+            "apiVersion": "[parameters('apiVersion')]",
+            "properties": "[parameters('schedules')[copyIndex()]]",
+            "copy": {
+                "name": "pooledSchedulesCopy",
+                "count": "[length(parameters('schedules'))]"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.DesktopVirtualization/scalingplans', parameters('scalingPlanName'))]"
+            ]
+        },
+        {
+            "condition": "[and(equals(parameters('hostPoolType'), 'Personal'), parameters('systemData').personalScalingPlanFeature)]",
+            "type": "Microsoft.DesktopVirtualization/scalingPlans/personalSchedules",
+            "name": "[concat(parameters('scalingPlanName'), '/', parameters('schedules')[copyIndex()].name)]",
+            "apiVersion": "[parameters('apiVersion')]",
+            "properties": "[parameters('schedules')[copyIndex()]]",
+            "copy": {
+                "name": "personalSchedulesCopy",
+                "count": "[length(parameters('schedules'))]"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.DesktopVirtualization/scalingplans', parameters('scalingPlanName'))]"
+            ]
+        }
+    ]
+}

@@ -444,7 +444,7 @@
     "resources": [
       {
         "apiVersion": "2018-05-01",
-        "name": "[concat('UpdateHostPool-', parameters('deploymentId'))]",
+        "name": "[concat(parameters('deploymentId'),'-updatehostpool')]",
         "type": "Microsoft.Resources/deployments",
         "resourceGroup": "[parameters('hostpoolResourceGroup')]",
         "condition": "[not(empty(parameters('hostpoolResourceGroup')))]",
@@ -467,7 +467,7 @@
       },
       {
         "apiVersion": "2018-05-01",
-        "name": "[concat('AVSet-linkedTemplate-', parameters('deploymentId'))]",
+        "name": "[concat(parameters('deploymentId'), '-avset')]",
         "type": "Microsoft.Resources/deployments",
         "resourceGroup": "[parameters('vmResourceGroup')]",
         "condition": "[and(equals(parameters('availabilityOption'), 'AvailabilitySet'), parameters('createAvailabilitySet'))]",
@@ -495,15 +495,15 @@
           }
         },
         "dependsOn": [
-          "[concat('UpdateHostPool-', parameters('deploymentId'))]"
+          "[concat(parameters('deploymentId'),'-updatehostpool')]"
         ]
       },
       {
         "apiVersion": "2018-05-01",
-        "name": "[concat('vmCreation-linkedTemplate-', parameters('deploymentId'))]",
+        "name": "[concat(parameters('deploymentId'), '-vm')]",
         "resourceGroup": "[parameters('vmResourceGroup')]",
         "dependsOn": [
-          "[concat('AVSet-linkedTemplate-', parameters('deploymentId'))]"
+          "[concat(parameters('deploymentId'), '-avset')]"
         ],
         "type": "Microsoft.Resources/deployments",
         "properties": {
