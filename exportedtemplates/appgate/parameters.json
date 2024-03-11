@@ -1,0 +1,78 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "value": "eastus2"
+        },
+        "networkInterfaceName": {
+            "value": "appgate-appliance-vm-nic"
+        },
+        "subnetName": {
+            "value": "snet-shd-eu2-1"
+        },
+        "virtualNetworkId": {
+            "value": "/subscriptions/7e636463-ae90-4544-b221-d61fc5233e09/resourceGroups/rg-shd-eu2-1/providers/Microsoft.Network/virtualNetworks/vnet-shd-eu2-1"
+        },
+        "virtualMachineName": {
+            "value": "appgate-appliance-vm"
+        },
+        "virtualMachineComputerName": {
+            "value": "appgate-appliance-vm"
+        },
+        "virtualMachineRG": {
+            "value": "rg-shd-eu2-1"
+        },
+        "osDiskType": {
+            "value": "Premium_LRS"
+        },
+        "osDiskDeleteOption": {
+            "value": "Delete"
+        },
+        "dataDisks": {
+            "value": [
+                {
+                    "lun": 0,
+                    "createOption": "attach",
+                    "deleteOption": "Delete",
+                    "caching": "None",
+                    "writeAcceleratorEnabled": false,
+                    "id": null,
+                    "name": "appgate-appliance-vm_DataDisk_0",
+                    "storageAccountType": null,
+                    "diskSizeGB": null,
+                    "diskEncryptionSet": null
+                }
+            ]
+        },
+        "dataDiskResources": {
+            "value": [
+                {
+                    "name": "appgate-appliance-vm_DataDisk_0",
+                    "sku": "Premium_LRS",
+                    "properties": {
+                        "diskSizeGB": 32,
+                        "creationData": {
+                            "createOption": "empty"
+                        }
+                    }
+                }
+            ]
+        },
+        "virtualMachineSize": {
+            "value": "Standard_B2s"
+        },
+        "nicDeleteOption": {
+            "value": "Delete"
+        },
+        "hibernationEnabled": {
+            "value": false
+        },
+        "adminUsername": {
+            "value": "cz"
+        },
+        "adminPublicKey": {
+            "value": null
+        }
+    }
+}

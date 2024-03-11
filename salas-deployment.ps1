@@ -119,7 +119,7 @@ $ParameterObject = @{
     hostpoolType = 'Personal'
     personalDesktopAssignmentType = 'Automatic'
     loadBalancerType = 'Persistent'
-    customRdpProperty = 'enablerdsaadauth:i:1;enablecredsspsupport:i:1;videoplaybackmode:i:1;audiocapturemode:i:1;audiomode:i:0;camerastoredirect:s:*;devicestoredirect:s:;drivestoredirect:s:*;redirectclipboard:i:1;redirectcomports:i:0;redirectprinters:i:1;redirectsmartcards:i:0;redirectwebauthn:i:1;usbdevicestoredirect:s:*;use multimon:i:1;dynamic resolution:i:1'
+    customRdpProperty = 'enablerdsaadauth:i:1;enablecredsspsupport:i:1;videoplaybackmode:i:1;audiocapturemode:i:1;audiomode:i:0;camerastoredirect:s:*;devicestoredirect:s:;drivestoredirect:s:;redirectclipboard:i:0;redirectcomports:i:0;redirectprinters:i:0;redirectsmartcards:i:0;usbdevicestoredirect:s:;use multimon:i:1;dynamic resolution:i:1;autoreconnection enabled:i:0;bandwidthautodetect:i:1;networkautodetect:i:1'
     vmTemplate = '{"domain":"","galleryImageOffer":"windows-11","galleryImagePublisher":"microsoftwindowsdesktop","galleryImageSKU":"win11-22h2-ent","imageType":"Gallery","customImageId":null,"namePrefix":"avd-vm-admin","osDiskType":"Premium_LRS","vmSize":{"id":"Standard_D2s_v3","cores":2,"ram":8},"galleryItemId":"microsoftwindowsdesktop.windows-11win11-22h2-ent","hibernate":false,"diskSizeGB":0,"securityType":"TrustedLaunch","secureBoot":true,"vTPM":true}'
     tokenExpirationTime = (Get-Date).AddDays(25)
     hostpoolTags = @{environment = 'admin'}
@@ -391,7 +391,7 @@ $ParameterObject = @{
     hostpoolType = 'Personal'
     personalDesktopAssignmentType = 'Automatic'
     loadBalancerType = 'Persistent'
-    customRdpProperty = 'enablerdsaadauth:i:1;enablecredsspsupport:i:1;videoplaybackmode:i:1;audiocapturemode:i:1;audiomode:i:0;camerastoredirect:s:*;devicestoredirect:s:;drivestoredirect:s:*;redirectclipboard:i:1;redirectcomports:i:0;redirectprinters:i:1;redirectsmartcards:i:0;redirectwebauthn:i:1;usbdevicestoredirect:s:*;use multimon:i:1;dynamic resolution:i:1'
+    customRdpProperty = 'enablerdsaadauth:i:1;enablecredsspsupport:i:1;videoplaybackmode:i:1;audiocapturemode:i:1;audiomode:i:0;camerastoredirect:s:*;devicestoredirect:s:;drivestoredirect:s:;redirectclipboard:i:0;redirectcomports:i:0;redirectprinters:i:0;redirectsmartcards:i:0;usbdevicestoredirect:s:;use multimon:i:1;dynamic resolution:i:1;autoreconnection enabled:i:0;bandwidthautodetect:i:1;networkautodetect:i:1'
     vmTemplate = "{`"domain`":`"`",`"galleryImageOffer`":null,`"galleryImagePublisher`":null,`"galleryImageSKU`":null,`"imageType`":`"CustomImage`",`"customImageId`":`"$GalleryImageVersionId`",`"namePrefix`":`"cad-avd`",`"osDiskType`":`"Premium_LRS`",`"vmSize`":{`"id`":`"Standard_NC8as_T4_v3`",`"cores`":8,`"ram`":56,`"rdmaEnabled`":false,`"supportsMemoryPreservingMaintenance`":false},`"galleryItemId`":null,`"hibernate`":false,`"diskSizeGB`":0,`"securityType`":`"TrustedLaunch`",`"secureBoot`":true,`"vTPM`":true,`"vmInfrastructureType`":`"Cloud`",`"virtualProcessorCount`":null,`"memoryGB`":null,`"maximumMemoryGB`":null,`"minimumMemoryGB`":null,`"dynamicMemoryConfig`":false}"
     tokenExpirationTime = (Get-Date).AddDays(25)
     hostpoolTags = @{environment = 'cad'}
@@ -497,7 +497,7 @@ Get-MgUser -ConsistencyLevel eventual -Count userCount -Filter  "endsWith(UserPr
     New-MgGroupMember @parameters
 }
 
-
+# Does not complete when ,ultiple schedules are listed -- need to fix
 $ParameterObject = @{
     scalingPlanName = 'scal-salas-uv-default-1'
     scalingPlanDescription = 'Default scaling plan'
@@ -604,6 +604,56 @@ $DeploymentParams = @{
     Name = 'scaling-plan-avd-hp-cad-uv-1'
     ResourceGroupName = $CustomerResourceGroupName
     TemplateFile = 'C:\GitHub\Azure-PS-Resource-Manager\microsoft.compute\azure-virtual-desktop\scaling-plan\azuredeploy.json'
+    TemplateParameterObject = $ParameterObject
+}
+New-AzResourceGroupDeployment @DeploymentParams
+
+# Deploy Appgate
+# first create ssh key in portal
+Set-AzMarketplaceTerms -Name "v6_2_vm" -Publisher "cyxtera" -Product "appgatesdp-vm" -Accept
+$ParameterObject = @{
+    location = $Location
+    networkInterfaceName = "appgate-appliance-vm-nic"
+    subnetName = "snet-shd-uv-1"
+    virtualNetworkId = (Get-AzVirtualNetwork -Name ('vnet-shd-{0}-1' -f $LocationShortName) -ResourceGroupName $SharedResourceGroupName).Id
+    virtualMachineName = "appgate-appliance-vm"
+    virtualMachineComputerName = "appgate-appliance-vm"
+    virtualMachineRG = "rg-shd-eu2-1"
+    osDiskName = "appgate-appliance-vm_OsDisk_0"
+    osDiskType = "Premium_LRS"
+    osDiskDeleteOption = "Delete"
+    dataDisks = @(
+        @{
+            lun = 0
+            createOption = 'attach'
+            deleteOption = 'Delete'
+            caching = 'None'
+            writeAcceleratorEnabled = $false
+            name = 'appgate-appliance-vm_DataDisk_0'
+        }
+    )
+    "dataDiskResources" = @(
+        @{
+            name = 'appgate-appliance-vm_DataDisk_0'
+            sku = 'Premium_LRS'
+            properties = @{
+                diskSizeGB = 32
+                creationData = @{
+                    createOption = 'empty'
+                }
+            }
+        }
+    )
+    virtualMachineSize = 'Standard_B2s'
+    nicDeleteOption = 'Delete'
+    hibernationEnabled = $false
+    adminUsername = 'cz'
+    adminPublicKey = (Get-AzSshKey -Name 'ssh-shd-salas-uv-appgate-1').publicKey 
+}
+$DeploymentParams = @{
+    Name = 'appgate-controller-shd'
+    ResourceGroupName = $SharedResourceGroupName
+    TemplateFile = 'C:\GitHub\Azure-PS-Resource-Manager\microsoft.compute\appgate\azuredeploy.json'
     TemplateParameterObject = $ParameterObject
 }
 New-AzResourceGroupDeployment @DeploymentParams
