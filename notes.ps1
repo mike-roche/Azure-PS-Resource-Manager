@@ -1,4 +1,104 @@
 #notes
+Connect-AzAccount -Environment AzureUSGovernment
+
+$Params = @{
+    City = 'Merritt Island'
+    CompanyName = "Salas O'Brien"
+    Department = 'Mechanical'
+    DisplayName = 'Michael Knott'
+    GivenName = 'Michael'
+    JobTitle = 'Fire Protection Engineer'
+    Mail = 'michael.knott@salasobriengov.com'
+    MailNickName = 'michael.knott'
+    PostalCode = '32953'
+    State = 'Florida'
+    StreetAddress = '5455 North Courtenay Parkway'
+    Surname  = 'Knott'
+    UsageLocation = 'US'
+    UserPrincipalName = 'michael.knott@salasobriengov.com'
+    Password = ConvertTo-SecureString -String 'r3dPlay56' -AsPlainText -Force  
+}
+New-AzADUser @Params
+
+$Params = @{
+    City = 'Merritt Island'
+    CompanyName = "Salas O'Brien"
+    Department = 'Drafting'
+    DisplayName = 'Jay Fletcher'
+    GivenName = 'Jay'
+    JobTitle = 'Fire Protection Designer'
+    Mail = 'jay.fletcher@salasobriengov.com'
+    MailNickName = 'jay.fletcher'
+    PostalCode = '32953'
+    State = 'Florida'
+    StreetAddress = '5455 North Courtenay Parkway'
+    Surname  = 'Fletcher'
+    UsageLocation = 'US'
+    UserPrincipalName = 'jay.fletcher@salasobriengov.com'
+    Password = ConvertTo-SecureString -String '@ngryFlag53' -AsPlainText -Force  
+}
+New-AzADUser @Params
+
+$Params = @{
+    City = 'Merritt Island'
+    CompanyName = "Salas O'Brien"
+    Department = 'Drafting'
+    DisplayName = 'Matthew Johnson'
+    GivenName = 'Matthew'
+    JobTitle = 'Drafter'
+    Mail = 'matthew.johnson@salasobriengov.com'
+    MailNickName = 'matthew.johnson'
+    PostalCode = '32953'
+    State = 'Florida'
+    StreetAddress = '5455 North Courtenay Parkway'
+    Surname  = 'Johnson'
+    UsageLocation = 'US'
+    UserPrincipalName = 'matthew.johnson@salasobriengov.com'
+    Password = ConvertTo-SecureString -String 'm3ssyRoll66' -AsPlainText -Force
+}
+New-AzADUser @Params
+
+$Params = @{
+    City = 'Merritt Island'
+    CompanyName = "Salas O'Brien"
+    Department = 'Drafting'
+    DisplayName = 'Michael Horne'
+    GivenName = 'Michael'
+    JobTitle = 'BIM Production Manager'
+    Mail = 'michael.horne@salasobriengov.com'
+    MailNickName = 'michael.horne'
+    PostalCode = '32953'
+    State = 'Florida'
+    StreetAddress = '5455 North Courtenay Parkway'
+    Surname  = 'Horne'
+    UsageLocation = 'US'
+    UserPrincipalName = 'michael.horne@salasobriengov.com'
+    Password = ConvertTo-SecureString -String 'dampM3mory51' -AsPlainText -Force
+}
+New-AzADUser @Params
+
+
+$Params = @{
+    City = 'Merritt Island'
+    CompanyName = "Salas O'Brien"
+    Department = 'Drafting'
+    DisplayName = 'Bryan Harvey'
+    GivenName = 'Bryan'
+    JobTitle = 'BIM Department Manager'
+    Mail = 'bryan.harvey@salasobriengov.com'
+    MailNickName = 'bryan.harvey'
+    PostalCode = '32953'
+    State = 'Florida'
+    StreetAddress = '5455 North Courtenay Parkway'
+    Surname  = 'Harvey'
+    UsageLocation = 'US'
+    UserPrincipalName = 'bryan.harvey@salasobriengov.com'
+    Password = ConvertTo-SecureString -String '!voryApple84' -AsPlainText -Force
+}
+New-AzADUser @Params
+
+
+
 $Permissions = @(
     "Policy.Read.All",
     "Policy.ReadWrite.ConditionalAccess",
