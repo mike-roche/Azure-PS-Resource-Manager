@@ -131,13 +131,14 @@
         "availabilitySetId": {
             "id": "[if(and(parameters('createAvailabilitySet'), not(parameters('enablePersistentDesktop'))), resourceId('Microsoft.Compute/availabilitySets/', concat(parameters('rdshPrefix'), 'availabilitySet')), json('null'))]"
         },
-        "vmNameSuffix": "[if(parameters('useRandomSuffix'), substring(uniqueString(resourceGroup().id, deployment().name), 0, 4), string(copyIndex()))]"
+        "vmNameSuffix": "[if(parameters('useRandomSuffix'), toLower(take(replace(guid(resourceGroup().id, deployment().name), '-', ''), 4)), padLeft(string(copyIndex()), 4, '0'))]",
+        "vmName": "[concat(parameters('rdshPrefix'), '-', variables('vmNameSuffix'))]"
     },
     "resources": [
         {
             "apiVersion": "2018-11-01",
             "type": "Microsoft.Network/networkInterfaces",
-            "name": "[concat(parameters('rdshPrefix'), '-', variables('vmNameSuffix'), '-nic')]",
+            "name": "[concat(variables('vmName'), '-nic')]",
             "location": "[parameters('location')]",
             "copy": {
                 "name": "rdsh-nic-loop",
@@ -161,14 +162,14 @@
         {
             "apiVersion": "2018-10-01",
             "type": "Microsoft.Compute/virtualMachines",
-            "name": "[concat(parameters('rdshPrefix'), '-', variables('vmNameSuffix'))]",
+            "name": "[variables('vmName')]",
             "location": "[parameters('location')]",
             "copy": {
                 "name": "rdsh-vm-loop",
                 "count": "[parameters('rdshNumberOfInstances')]"
             },
             "dependsOn": [
-                "[concat('Microsoft.Network/networkInterfaces/', parameters('rdshPrefix'), '-', variables('vmNameSuffix'), '-nic')]"
+                "[concat('Microsoft.Network/networkInterfaces/', variables('vmName'), '-nic')]"
             ],
             "properties": {
                 "hardwareProfile": {
@@ -176,7 +177,7 @@
                 },
                 "availabilitySet": "[if(not(equals(variables('availabilitySetId').id, json('null'))), variables('availabilitySetId'), json('null'))]",
                 "osProfile": {
-                    "computerName": "[concat(parameters('rdshPrefix'), '-', variables('vmNameSuffix'))]",
+                    "computerName": "[variables('vmName')]",
                     "adminUsername": "[parameters('existingDomainUsername')]",
                     "adminPassword": "[parameters('existingDomainPassword')]"
                 },
@@ -194,7 +195,7 @@
                 "networkProfile": {
                     "networkInterfaces": [
                         {
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(parameters('rdshPrefix'), '-', variables('vmNameSuffix'), '-nic'))]"
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(variables('vmName'), '-nic'))]"
                         }
                     ]
                 },

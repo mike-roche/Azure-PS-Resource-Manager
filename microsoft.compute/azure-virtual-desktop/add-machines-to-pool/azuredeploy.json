@@ -421,6 +421,13 @@
           "description": "Specifies whether vTPM (Virtual Trusted Platform Module) should be enabled on the virtual machine."
         },
         "defaultValue": false
+      },
+      "useRandomSuffix": {
+        "type": "bool",
+        "defaultValue": false,
+        "metadata": {
+          "description": "Set to true to use random 4-character alphanumeric suffixes for VM names, false to use sequential numbers."
+        }
       }
     },
     "variables": {
@@ -429,13 +436,14 @@
       "subnet-id": "[resourceId(parameters('virtualNetworkResourceGroupName'),'Microsoft.Network/virtualNetworks/subnets',parameters('existingVnetName'), parameters('existingSubnetName'))]",
       "vmTemplateName": "[concat( 'managedDisks-', toLower(replace(parameters('vmImageType'),' ', '')), 'vm')]",
       "vmTemplateUri": "[concat(parameters('nestedTemplatesLocation'), variables('vmTemplateName'),'.json')]",
+      "vmNameSuffix": "[if(parameters('useRandomSuffix'), toLower(take(replace(guid(resourceGroup().id, deployment().name), '-', ''), 4)), padLeft(string(add(copyIndex('rdshVmNamesCopy'), parameters('vmInitialNumber'))), 4, '0'))]",
       "rdshVmNamesOutput": {
         "copy": [
           {
             "name": "rdshVmNamesCopy",
             "count": "[parameters('vmNumberOfInstances')]",
             "input": {
-              "name": "[concat(variables('rdshPrefix'), add(parameters('vmInitialNumber'), copyIndex('rdshVmNamesCopy')))]"
+              "name": "[concat(variables('rdshPrefix'), variables('vmNameSuffix'))]"
             }
           }
         ]
@@ -656,6 +664,9 @@
             },
             "vTPM": {
               "value": "[parameters('vTPM')]"
+            },
+            "useRandomSuffix": {
+              "value": "[parameters('useRandomSuffix')]"
             }
           }
         }
