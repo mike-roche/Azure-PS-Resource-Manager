@@ -73,7 +73,7 @@
       "rdshPrefix": {
         "type": "string",
         "metadata": {
-          "description": "This prefix will be used in combination with the VM number to create the VM name. This value includes the dash, so if using \"rdsh\" as the prefix, VMs would be named \"rdsh-0\", \"rdsh-1\", etc. You should use a unique prefix to reduce name collisions in Active Directory."
+          "description": "This prefix will be used in combination with the VM number to create the VM name. This value includes the dash, so if using 'rdsh' as the prefix, VMs would be named 'rdsh-0', 'rdsh-1', etc. You should use a unique prefix to reduce name collisions in Active Directory."
         },
         "defaultValue": "[take(toLower(resourceGroup().name),10)]"
       },
@@ -144,23 +144,10 @@
         },
         "defaultValue": ""
       },
-      "vhds": {
-        "type": "string",
-        "metadata": {
-          "description": "The URL to store unmanaged disks."
-        }
-      },
       "subnet-id": {
         "type": "string",
         "metadata": {
           "description": "The unique id of the subnet for the nics."
-        }
-      },
-      "rdshImageSourceId": {
-        "type": "string",
-        "defaultValue": "",
-        "metadata": {
-          "description": "Resource ID of the image."
         }
       },
       "location": {
@@ -169,13 +156,6 @@
         "metadata": {
           "description": "Location for all resources to be created in."
         }
-      },
-      "edgeZone": {
-        "type": "string",
-        "metadata": {
-          "description": "EdgeZone for resources to be created in."
-        },
-        "defaultValue": ""
       },
       "createNetworkSecurityGroup": {
         "type": "bool",
@@ -216,13 +196,6 @@
         "type": "object",
         "metadata": {
           "description": "The tags to be assigned to the virtual machines"
-        },
-        "defaultValue": {}
-      },
-      "imageTags": {
-        "type": "object",
-        "metadata": {
-          "description": "The tags to be assigned to the images"
         },
         "defaultValue": {}
       },
@@ -344,10 +317,10 @@
       },
       "useRandomSuffix": {
         "type": "bool",
-        "defaultValue": false,
         "metadata": {
-          "description": "Set to true to use random 4-character alphanumeric suffixes for VM names, false to use sequential numbers."
-        }
+          "description": "Specifies whether to use a random 4-character alphanumeric suffix for VM names instead of sequential numbers."
+        },
+        "defaultValue": false
       }
     },
     "variables": {
@@ -367,10 +340,6 @@
         "publisher": "[parameters('vmGalleryImagePublisher')]",
         "product": "[parameters('vmGalleryImageOffer')]"
       },
-      "extendedLocation": {
-          "type": "EdgeZone",
-          "name": "[parameters('edgeZone')]"
-        },
       "vmPlan": "[if(or(variables('planInfoEmpty'), not(parameters('vmGalleryImageHasPlan'))), json('null'), variables('marketplacePlan'))]",
       "vmIdentityType": "[if(parameters('aadJoin'), if(not(empty(parameters('userAssignedIdentity'))), 'SystemAssigned, UserAssigned', 'SystemAssigned'), if(not(empty(parameters('userAssignedIdentity'))), 'UserAssigned', 'None'))]",
       "vmIdentityTypeProperty": {
@@ -403,8 +372,16 @@
         "securityType": "[parameters('securityType')]"
       },
       "countOfSelectedAZ":"[length(parameters('availabilityZones'))]",
-      "vmNameSuffix": "[if(parameters('useRandomSuffix'), toLower(take(replace(guid(resourceGroup().id, deployment().name), '-', ''), 4)), padLeft(string(add(copyIndex(), parameters('vmInitialNumber'))), 4, '0'))]",
-      "vmName": "[concat(parameters('rdshPrefix'), variables('vmNameSuffix'))]"
+      "vmNameSuffix": "[if(parameters('useRandomSuffix'), concat('-', take(uniqueString(resourceGroup().id, deployment().name), 4)), '')]",
+      "vmNames": {
+        "copy": [
+          {
+            "name": "vmNameArray",
+            "count": "[parameters('rdshNumberOfInstances')]",
+            "input": "[concat(parameters('rdshPrefix'), variables('vmNameSuffix'), '-', padLeft(add(copyIndex(), parameters('vmInitialNumber')), 3, '0'))]"
+          }
+        ]
+      }
     },
     "resources": [
       {
@@ -435,9 +412,8 @@
       {
         "apiVersion": "2022-11-01",
         "type": "Microsoft.Network/networkInterfaces",
-        "name": "[concat(variables('vmName'), '-nic')]",
+        "name": "[concat(variables('vmNames').vmNameArray[copyIndex()], '-nic')]",
         "location": "[parameters('location')]",
-        "extendedLocation": "[if(empty(parameters('edgeZone')), null(), variables('extendedLocation'))]",
         "tags": "[parameters('networkInterfaceTags')]",
         "copy": {
           "name": "rdsh-nic-loop",
@@ -465,9 +441,8 @@
       {
         "apiVersion": "2023-07-01",
         "type": "Microsoft.Compute/virtualMachines",
-        "name": "[variables('vmName')]",
+        "name": "[variables('vmNames').vmNameArray[copyIndex()]]",
         "location": "[parameters('location')]",
-        "extendedLocation": "[if(empty(parameters('edgeZone')), null(), variables('extendedLocation'))]",
         "tags": "[parameters('virtualMachineTags')]",
         "plan": "[variables('vmPlan')]",
         "copy": {
@@ -475,7 +450,7 @@
           "count": "[parameters('rdshNumberOfInstances')]"
         },
         "dependsOn": [
-          "[concat('Microsoft.Network/networkInterfaces/', variables('vmName'), '-nic')]"
+          "[resourceId('Microsoft.Network/networkInterfaces', concat(variables('vmNames').vmNameArray[copyIndex()], '-nic'))]"
         ],
         "identity": "[variables('vmIdentity')]",
         "properties": {
@@ -484,7 +459,7 @@
           },
           "availabilitySet": "[if(equals(parameters('availabilityOption'), 'AvailabilitySet'), variables('vmAvailabilitySetResourceId'), json('null'))]",
           "osProfile": {
-            "computerName": "[variables('vmName')]",
+            "computerName": "[variables('vmNames').vmNameArray[copyIndex()]]",
             "adminUsername": "[variables('vmAdministratorUsername')]",
             "adminPassword": "[variables('vmAdministratorPassword')]"
           },
@@ -507,7 +482,7 @@
           "networkProfile": {
             "networkInterfaces": [
               {
-                "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(variables('vmName'), '-nic'))]"
+                "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(variables('vmNames').vmNameArray[copyIndex()], '-nic'))]"
               }
             ]
           },
@@ -524,7 +499,7 @@
       {
         "apiVersion": "2021-07-01",
         "type": "Microsoft.Compute/virtualMachines/extensions",
-        "name": "[concat(variables('vmName'), '/', 'Microsoft.PowerShell.DSC')]",
+        "name": "[concat(variables('vmNames').vmNameArray[copyIndex()], '/', 'Microsoft.PowerShell.DSC')]",
         "location": "[parameters('location')]",
         "dependsOn": [ "rdsh-vm-loop" ],
         "copy": {
@@ -555,7 +530,7 @@
         "condition": "[and(parameters('aadJoin'), contains(parameters('systemData'), 'aadJoinPreview'), not(parameters('systemData').aadJoinPreview))]",
         "apiVersion": "2021-07-01",
         "type": "Microsoft.Compute/virtualMachines/extensions",
-        "name": "[concat(variables('vmName'), '/', 'AADLoginForWindows')]",
+        "name": "[concat(variables('vmNames').vmNameArray[copyIndex()], '/', 'AADLoginForWindows')]",
         "location": "[parameters('location')]",
         "dependsOn": [ "rdsh-dsc-loop" ],
         "copy": {
@@ -574,7 +549,7 @@
         "condition": "[not(parameters('aadJoin'))]",
         "apiVersion": "2021-07-01",
         "type": "Microsoft.Compute/virtualMachines/extensions",
-        "name": "[concat(variables('vmName'), '/', 'joindomain')]",
+        "name": "[concat(variables('vmNames').vmNameArray[copyIndex()], '/', 'joindomain')]",
         "location": "[parameters('location')]",
         "dependsOn": [ "rdsh-dsc-loop" ],
         "copy": {
