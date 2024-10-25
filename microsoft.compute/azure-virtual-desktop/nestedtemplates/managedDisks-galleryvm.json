@@ -399,13 +399,14 @@
         "securityType": "[parameters('securityType')]"
       },
       "countOfSelectedAZ":"[length(parameters('availabilityZones'))]",
-      "vmNameSuffix": "[if(parameters('useRandomSuffix'), concat('-', take(uniqueString(resourceGroup().id, deployment().name), 4)), '')]",
       "vmNames": {
         "copy": [
           {
             "name": "vmNameArray",
             "count": "[parameters('rdshNumberOfInstances')]",
-            "input": "[concat(parameters('rdshPrefix'), variables('vmNameSuffix'), '-', padLeft(add(copyIndex(), parameters('vmInitialNumber')), 3, '0'))]"
+            "input": "[if(parameters('useRandomSuffix'), 
+                          concat(parameters('rdshPrefix'), '-', take(uniqueString(resourceGroup().id, deployment().name, copyIndex()), 4)),
+                          concat(parameters('rdshPrefix'), '-', padLeft(add(copyIndex(), parameters('vmInitialNumber')), 3, '0')))]"
           }
         ]
       }
@@ -439,7 +440,7 @@
       {
         "apiVersion": "2022-11-01",
         "type": "Microsoft.Network/networkInterfaces",
-        "name": "[concat(variables('vmNames').vmNameArray[copyIndex()], '-nic')]",
+        "name": "[concat(variables('vmNames')[copyIndex()], '-nic')]",
         "location": "[parameters('location')]",
         "tags": "[parameters('networkInterfaceTags')]",
         "copy": {
@@ -468,7 +469,7 @@
       {
         "apiVersion": "2023-07-01",
         "type": "Microsoft.Compute/virtualMachines",
-        "name": "[variables('vmNames').vmNameArray[copyIndex()]]",
+        "name": "[variables('vmNames')[copyIndex()]]",
         "location": "[parameters('location')]",
         "tags": "[parameters('virtualMachineTags')]",
         "plan": "[variables('vmPlan')]",
@@ -477,7 +478,7 @@
           "count": "[parameters('rdshNumberOfInstances')]"
         },
         "dependsOn": [
-          "[resourceId('Microsoft.Network/networkInterfaces', concat(variables('vmNames').vmNameArray[copyIndex()], '-nic'))]"
+          "[resourceId('Microsoft.Network/networkInterfaces', concat(variables('vmNames')[copyIndex()], '-nic'))]"
         ],
         "identity": "[variables('vmIdentity')]",
         "properties": {
@@ -486,7 +487,7 @@
           },
           "availabilitySet": "[if(equals(parameters('availabilityOption'), 'AvailabilitySet'), variables('vmAvailabilitySetResourceId'), json('null'))]",
           "osProfile": {
-            "computerName": "[variables('vmNames').vmNameArray[copyIndex()]]",
+            "computerName": "[variables('vmNames')[copyIndex()]]",
             "adminUsername": "[variables('vmAdministratorUsername')]",
             "adminPassword": "[variables('vmAdministratorPassword')]"
           },
@@ -509,7 +510,7 @@
           "networkProfile": {
             "networkInterfaces": [
               {
-                "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(variables('vmNames').vmNameArray[copyIndex()], '-nic'))]"
+                "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(variables('vmNames')[copyIndex()], '-nic'))]"
               }
             ]
           },
@@ -526,7 +527,7 @@
       {
         "apiVersion": "2021-07-01",
         "type": "Microsoft.Compute/virtualMachines/extensions",
-        "name": "[concat(variables('vmNames').vmNameArray[copyIndex()], '/', 'Microsoft.PowerShell.DSC')]",
+        "name": "[concat(variables('vmNames')[copyIndex()], '/', 'Microsoft.PowerShell.DSC')]",
         "location": "[parameters('location')]",
         "dependsOn": [ "rdsh-vm-loop" ],
         "copy": {
@@ -557,7 +558,7 @@
         "condition": "[and(parameters('aadJoin'), contains(parameters('systemData'), 'aadJoinPreview'), not(parameters('systemData').aadJoinPreview))]",
         "apiVersion": "2021-07-01",
         "type": "Microsoft.Compute/virtualMachines/extensions",
-        "name": "[concat(variables('vmNames').vmNameArray[copyIndex()], '/', 'AADLoginForWindows')]",
+        "name": "[concat(variables('vmNames')[copyIndex()], '/', 'AADLoginForWindows')]",
         "location": "[parameters('location')]",
         "dependsOn": [ "rdsh-dsc-loop" ],
         "copy": {
@@ -576,7 +577,7 @@
         "condition": "[not(parameters('aadJoin'))]",
         "apiVersion": "2021-07-01",
         "type": "Microsoft.Compute/virtualMachines/extensions",
-        "name": "[concat(variables('vmNames').vmNameArray[copyIndex()], '/', 'joindomain')]",
+        "name": "[concat(variables('vmNames')[copyIndex()], '/', 'joindomain')]",
         "location": "[parameters('location')]",
         "dependsOn": [ "rdsh-dsc-loop" ],
         "copy": {
