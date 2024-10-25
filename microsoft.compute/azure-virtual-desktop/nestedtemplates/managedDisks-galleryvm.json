@@ -404,7 +404,7 @@
       },
       "countOfSelectedAZ":"[length(parameters('availabilityZones'))]",
       "vmNameSuffix": "[if(parameters('useRandomSuffix'), toLower(take(replace(guid(resourceGroup().id, deployment().name), '-', ''), 4)), padLeft(string(add(copyIndex(), parameters('vmInitialNumber'))), 4, '0'))]",
-      "vmName": "[concat(parameters('rdshPrefix'), '-', variables('vmNameSuffix'))]"
+      "vmName": "[concat(parameters('rdshPrefix'), variables('vmNameSuffix'))]"
     },
     "resources": [
       {
